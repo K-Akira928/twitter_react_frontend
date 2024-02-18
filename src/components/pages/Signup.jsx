@@ -51,7 +51,7 @@ export const Signup = () => {
             <div className="w-1/3"></div>
           </div>
         }
-        handleSubmit={(e) => handleSubmit(e)}
+        handleSubmit={handleSubmit}
         formBody={
           <>
             <h3 className="text-3xl font-bold mb-6">アカウントを作成</h3>
