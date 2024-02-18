@@ -1,5 +1,5 @@
-import axios from "axios";
 import { users } from "../urls";
+import { baseAxios } from "./base";
 
 export const usersActionTypes = {
   POSTING: "POSTING",
@@ -23,7 +23,7 @@ export const postRgistrationCreate = (formData) => {
     confirm_success_url: "http://localhost:3000/letter_opener/",
   };
 
-  return axios
+  return baseAxios
     .post(users, postData)
     .then(() => ({
       type: usersActionTypes.POST_SUCCESS,
