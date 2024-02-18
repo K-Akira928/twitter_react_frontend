@@ -11,8 +11,8 @@ function App() {
   return (
     <>
       <Routes location={backgroundLocation || location}>
-        <Route path={`/`} element={<Root />} />
-        <Route path={`/sign_up`} element={<Signup />} />
+        <Route path="/" element={<Root />} />
+        <Route path="/sign_up" element={<Signup />} />
       </Routes>
 
       {backgroundLocation && (

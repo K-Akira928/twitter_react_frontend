@@ -43,7 +43,7 @@ export const Signup = () => {
         fromHeader={
           <div className="flex justify-between items-center p-4">
             <div className="w-1/3">
-              <Link to={`/`}>
+              <Link to="/">
                 <RxCross2 size={25} />
               </Link>
             </div>
@@ -58,7 +58,7 @@ export const Signup = () => {
           <>
             <h3 className="text-3xl font-bold mb-6">アカウントを作成</h3>
             <div>
-              <TextInput placeholder={`ユーザー名`} name="name" type="text" />
+              <TextInput placeholder="ユーザー名" name="name" type="text" />
               <div className="h-10">
                 {postState.data.name && (
                   <small className="text-red-500">
