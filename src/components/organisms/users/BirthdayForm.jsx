@@ -1,5 +1,4 @@
 import React, { useMemo } from "react";
-import { Select } from "../../atoms/inputs/Select";
 import { useBirthdaySelectReducer } from "../../../hooks/users";
 
 export const BirthdayForm = () => {
@@ -22,7 +21,8 @@ export const BirthdayForm = () => {
 
   const selectYearMemo = useMemo(
     () => (
-      <Select
+      <select
+        className="form-input-select"
         onChange={(e) =>
           dispatch({ type: "selectYear", value: e.target.value })
         }
@@ -36,14 +36,15 @@ export const BirthdayForm = () => {
             </option>
           );
         })}
-      </Select>
+      </select>
     ),
     []
   );
 
   const selectMonthMemo = useMemo(
     () => (
-      <Select
+      <select
+        className="form-input-select"
         onChange={(e) =>
           dispatch({ type: "selectMonth", value: e.target.value })
         }
@@ -58,14 +59,14 @@ export const BirthdayForm = () => {
             </option>
           );
         })}
-      </Select>
+      </select>
     ),
     []
   );
 
   const selectDayMemo = useMemo(
     () => (
-      <Select name="birthday">
+      <select className="form-input-select" name="birthday">
         <option hidden>日</option>
         {[...Array(dateState.lastDay)].map((_v, i) => {
           const day = i + 1;
@@ -75,7 +76,7 @@ export const BirthdayForm = () => {
             </option>
           );
         })}
-      </Select>
+      </select>
     ),
     [dateState]
   );

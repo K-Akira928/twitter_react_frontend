@@ -5,10 +5,6 @@ import { Link, useLocation } from "react-router-dom";
 import { FaApple, FaXTwitter } from "react-icons/fa6";
 import { FcGoogle } from "react-icons/fc";
 
-import { SecondaryRoudedButton } from "../atoms/buttons/SecondaryRoudedButton";
-import { PrimaryRoundedButton } from "../atoms/buttons/PrimaryRoundedButton";
-import { OutlineRoundedButton } from "../atoms/buttons/OutlineRoundedButton";
-
 export const Root = () => {
   const location = useLocation();
 
@@ -48,14 +44,14 @@ export const Root = () => {
         }
         callToActionContents={
           <>
-            <SecondaryRoudedButton>
+            <button className="btn-secondary">
               <FcGoogle className="mr-2" size={20} />
               Google で登録
-            </SecondaryRoudedButton>
-            <SecondaryRoudedButton>
+            </button>
+            <button className="btn-secondary">
               <FaApple className="mr-2" size={20} />
               Appleのアカウントで登録
-            </SecondaryRoudedButton>
+            </button>
             <div
               className={`
               flex
@@ -67,13 +63,13 @@ export const Root = () => {
               または
             </div>
             <Link to="/sign_up" state={{ backgroundLocation: location }}>
-              <PrimaryRoundedButton>アカウントを作成</PrimaryRoundedButton>
+              <button className="btn-primary">アカウントを作成</button>
             </Link>
             <small>
               アカウントを登録することにより、利用規約とプライバシーポリシー（Cookieの使用を含む）に同意したとみなされます。
             </small>
             <p className="font-bold mt-6">アカウントをお持ちの場合</p>
-            <OutlineRoundedButton>ログイン</OutlineRoundedButton>
+            <button className="btn-outline">ログイン</button>
           </>
         }
       />

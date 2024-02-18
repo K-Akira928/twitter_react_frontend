@@ -3,9 +3,7 @@ import { SignupLayout } from "../templates/SignupLayout";
 import { Link, Navigate } from "react-router-dom";
 import { RxCross2 } from "react-icons/rx";
 import { FaXTwitter } from "react-icons/fa6";
-import { TextInput } from "../atoms/inputs/TextInput";
 import { BirthdayForm } from "../organisms/users/BirthdayForm";
-import { SecondaryRoudedButton } from "../atoms/buttons/SecondaryRoudedButton";
 import { postRgistrationCreate, usersActionTypes } from "../../apis/users";
 import { usePostUserReducer } from "../../hooks/users";
 import { REQUEST_STATE } from "../../constants";
@@ -58,7 +56,12 @@ export const Signup = () => {
           <>
             <h3 className="text-3xl font-bold mb-6">アカウントを作成</h3>
             <div>
-              <TextInput placeholder="ユーザー名" name="name" type="text" />
+              <input
+                className="form-input-text"
+                placeholder="ユーザー名"
+                name="name"
+                type="text"
+              />
               <div className="h-10">
                 {postState.data.name && (
                   <small className="text-red-500">
@@ -68,7 +71,12 @@ export const Signup = () => {
               </div>
             </div>
             <div>
-              <TextInput placeholder="表示名" name="nickname" type="text" />
+              <input
+                className="form-input-text"
+                placeholder="表示名"
+                name="nickname"
+                type="text"
+              />
               <div className="h-10">
                 {postState.data.nickname && (
                   <small className="text-red-500">
@@ -78,7 +86,12 @@ export const Signup = () => {
               </div>
             </div>
             <div>
-              <TextInput placeholder="メール" name="email" type="text" />
+              <input
+                className="form-input-text"
+                placeholder="メール"
+                name="email"
+                type="text"
+              />
               <div className="h-10">
                 {postState.data.email && (
                   <small className="text-red-500">
@@ -88,7 +101,12 @@ export const Signup = () => {
               </div>
             </div>
             <div>
-              <TextInput placeholder="電話番号" name="phone" type="text" />
+              <input
+                className="form-input-text"
+                placeholder="電話番号"
+                name="phone"
+                type="text"
+              />
               <div className="h-10">
                 {postState.data.phone && (
                   <small className="text-red-500">
@@ -111,7 +129,8 @@ export const Signup = () => {
               </div>
             </div>
             <div>
-              <TextInput
+              <input
+                className="form-input-text"
                 placeholder="パスワード"
                 name="password"
                 type="password"
@@ -125,7 +144,8 @@ export const Signup = () => {
               </div>
             </div>
             <div>
-              <TextInput
+              <input
+                className="form-input-text"
                 placeholder="確認パスワード"
                 name="password_confirmation"
                 type="password"
@@ -139,7 +159,9 @@ export const Signup = () => {
               </div>
             </div>
             <div className="mt-auto">
-              <SecondaryRoudedButton type="submit">登録</SecondaryRoudedButton>
+              <button className="btn-primary" type="submit">
+                登録
+              </button>
             </div>
           </>
         }
