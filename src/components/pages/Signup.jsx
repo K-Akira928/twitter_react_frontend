@@ -38,7 +38,7 @@ export const Signup = () => {
       )}
 
       <SignupLayout
-        fromHeader={
+        formHeader={
           <div className="flex justify-between items-center p-4">
             <div className="w-1/3">
               <Link to="/">
@@ -159,7 +159,7 @@ export const Signup = () => {
               </div>
             </div>
             <div className="mt-auto">
-              <button className="btn-primary" type="submit">
+              <button className="btn-secondary" type="submit">
                 登録
               </button>
             </div>

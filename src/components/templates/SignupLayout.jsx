@@ -1,7 +1,7 @@
 import React from "react";
 
 export const SignupLayout = (props) => {
-  const { fromHeader, handleSubmit, formBody } = props;
+  const { formHeader, handleSubmit, formBody } = props;
 
   return (
     <>
@@ -23,7 +23,7 @@ export const SignupLayout = (props) => {
             text-white
           `}
           >
-            {fromHeader}
+            {formHeader}
             <form
               className={`
               h-full
