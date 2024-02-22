@@ -7,12 +7,16 @@ import { BirthdayForm } from "../organisms/users/BirthdayForm";
 import { postRgistrationCreate, usersActionTypes } from "../../apis/users";
 import { usePostUserReducer } from "../../hooks/users";
 import { REQUEST_STATE } from "../../constants";
+import { useRecoilValue } from "recoil";
+import { loginState } from "../../store/loginState";
 
 export const Signup = () => {
   const initialPostState = {
     status: REQUEST_STATE.INITIAL,
     data: [],
   };
+
+  const login = useRecoilValue(loginState);
 
   const [postState, dispatch] = usePostUserReducer(initialPostState);
 
@@ -36,6 +40,8 @@ export const Signup = () => {
       {postState.status === "OK" && (
         <Navigate to="/" replace={true} state={postState.data} />
       )}
+
+      {login && <Navigate to="/home" replace={true} />}
 
       <SignupLayout
         formHeader={

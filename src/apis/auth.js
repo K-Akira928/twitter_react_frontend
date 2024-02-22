@@ -1,4 +1,5 @@
-import { signIn, users } from "../urls";
+import Cookies from "js-cookie";
+import { signIn, users, validateToken } from "../urls";
 import { baseAxios, postingActionTypes } from "./base";
 
 export const postSessionCreate = (formData) => {
@@ -20,5 +21,22 @@ export const postSessionCreate = (formData) => {
     .catch((e) => ({
       type: postingActionTypes.POST_FAILED,
       errors: e.response.data.errors,
+    }));
+};
+
+export const getValidateToken = () => {
+  return baseAxios
+    .get(users + validateToken, {
+      headers: {
+        "access-token": Cookies.get("access-token"),
+        client: Cookies.get("client"),
+        uid: Cookies.get("uid"),
+      },
+    })
+    .then(() => ({
+      status: true,
+    }))
+    .catch(() => ({
+      status: false,
     }));
 };

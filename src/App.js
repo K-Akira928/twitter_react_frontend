@@ -1,23 +1,46 @@
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import "./App.css";
 import { Signup } from "./components/pages/Signup";
 import { Root } from "./components/pages/Root";
+import { Signin } from "./components/pages/Signin";
+import { Home } from "./components/pages/Home";
+import { useEffect } from "react";
+import { useSetRecoilState } from "recoil";
+import { loginState } from "./store/loginState";
+import { getValidateToken } from "./apis/auth";
 
 function App() {
   const location = useLocation();
+
+  const navigate = useNavigate();
+
+  const setLogin = useSetRecoilState(loginState);
+
   const backgroundLocation =
     location.state && location.state.backgroundLocation;
+
+  const handleRequireLogin = async () => {
+    const res = await getValidateToken();
+    res.status ? setLogin(true) : navigate("/");
+  };
+
+  useEffect(() => {
+    handleRequireLogin();
+  }, []);
 
   return (
     <>
       <Routes location={backgroundLocation || location}>
         <Route path="/" element={<Root />} />
         <Route path="/sign_up" element={<Signup />} />
+        <Route path="/sign_in" element={<Signin />} />
+        <Route path="/home" element={<Home />} />
       </Routes>
 
       {backgroundLocation && (
         <Routes>
           <Route path="/sign_up" element={<Signup />} />
+          <Route path="/sign_in" element={<Signin />} />
         </Routes>
       )}
     </>
