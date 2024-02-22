@@ -4,28 +4,29 @@ import { Link, Navigate } from "react-router-dom";
 import { RxCross2 } from "react-icons/rx";
 import { FaXTwitter } from "react-icons/fa6";
 import { BirthdayForm } from "../organisms/users/BirthdayForm";
-import { postRgistrationCreate, usersActionTypes } from "../../apis/users";
-import { usePostUserReducer } from "../../hooks/users";
+import { postRgistrationCreate } from "../../apis/users";
 import { REQUEST_STATE } from "../../constants";
 import { useRecoilValue } from "recoil";
 import { loginState } from "../../store/loginState";
+import { postingActionTypes } from "../../apis/base";
+import { useUserCreate } from "../../hooks/users";
 
 export const Signup = () => {
-  const initialPostState = {
+  const initialState = {
     status: REQUEST_STATE.INITIAL,
     data: [],
   };
 
   const login = useRecoilValue(loginState);
 
-  const [postState, dispatch] = usePostUserReducer(initialPostState);
+  const { postState, dispatch } = useUserCreate(initialState);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
 
-    dispatch({ type: usersActionTypes.POSTING });
+    dispatch({ type: postingActionTypes.POSTING });
 
     postRgistrationCreate(formData).then((res) => {
       dispatch({
@@ -69,9 +70,9 @@ export const Signup = () => {
                 type="text"
               />
               <div className="h-10">
-                {postState.data.name && (
+                {postState.errors?.name && (
                   <small className="text-red-500">
-                    ※ユーザー名{postState.data.name}
+                    ※ユーザー名{postState.errors.name}
                   </small>
                 )}
               </div>
@@ -84,9 +85,9 @@ export const Signup = () => {
                 type="text"
               />
               <div className="h-10">
-                {postState.data.nickname && (
+                {postState.errors?.nickname && (
                   <small className="text-red-500">
-                    ※表示名{postState.data.nickname}
+                    ※表示名{postState.errors.nickname}
                   </small>
                 )}
               </div>
@@ -99,9 +100,9 @@ export const Signup = () => {
                 type="text"
               />
               <div className="h-10">
-                {postState.data.email && (
+                {postState.errors?.email && (
                   <small className="text-red-500">
-                    ※メールアドレス{postState.data.email}
+                    ※メールアドレス{postState.errors.email}
                   </small>
                 )}
               </div>
@@ -114,9 +115,9 @@ export const Signup = () => {
                 type="text"
               />
               <div className="h-10">
-                {postState.data.phone && (
+                {postState.errors?.phone && (
                   <small className="text-red-500">
-                    ※電話番号{postState.data.phone}
+                    ※電話番号{postState.errors.phone}
                   </small>
                 )}
               </div>
@@ -127,9 +128,9 @@ export const Signup = () => {
             <div>
               <BirthdayForm />
               <div className="h-10">
-                {postState.data.birthday && (
+                {postState.errors?.birthday && (
                   <small className="text-red-500">
-                    ※生年月日{postState.data.birthday}
+                    ※生年月日{postState.errors.birthday}
                   </small>
                 )}
               </div>
@@ -142,9 +143,9 @@ export const Signup = () => {
                 type="password"
               />
               <div className="h-10">
-                {postState.data.password && (
+                {postState.errors?.password && (
                   <small className="text-red-500">
-                    ※パスワード{postState.data.password}
+                    ※パスワード{postState.errors.password}
                   </small>
                 )}
               </div>
@@ -157,9 +158,9 @@ export const Signup = () => {
                 type="password"
               />
               <div className="h-10">
-                {postState.data.password_confirmation && (
+                {postState.errors?.password_confirmation && (
                   <small className="text-red-500">
-                    ※確認パスワード{postState.data.password_confirmation}
+                    ※確認パスワード{postState.errors.password_confirmation}
                   </small>
                 )}
               </div>

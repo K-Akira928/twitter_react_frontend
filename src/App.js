@@ -21,7 +21,12 @@ function App() {
 
   const handleRequireLogin = async () => {
     const res = await getValidateToken();
-    res.status ? setLogin(true) : navigate("/");
+    if (res.status) {
+      setLogin(true);
+      navigate(location);
+    } else {
+      navigate("/");
+    }
   };
 
   useEffect(() => {

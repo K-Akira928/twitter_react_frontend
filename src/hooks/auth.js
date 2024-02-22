@@ -12,7 +12,7 @@ export const useAuthCreate = (initialState) => {
   };
 
   return {
-    state: postState,
+    postState: postState,
     dispatch: dispatch,
     callback: {
       success: successCallback,
