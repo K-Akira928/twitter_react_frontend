@@ -93,6 +93,7 @@
     @apply bg-black
             absolute
             w-full
+            h-full
             md:w-[600px]
             md:h-[700px]
             md:rounded-3xl
