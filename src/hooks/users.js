@@ -1,37 +1,9 @@
 import { useReducer } from "react";
-import { REQUEST_STATE } from "../constants";
+import { postReducer } from "../reducers/requestActionReducer";
 
-export const usePostUserReducer = (initialState) => {
-  const reducer = (state, action) => {
-    switch (action.type) {
-      case "POSTING":
-        return {
-          ...state,
-          status: REQUEST_STATE.LOADING,
-          data: [],
-        };
-      case "POST_SUCCESS":
-        return {
-          ...state,
-          status: REQUEST_STATE.OK,
-          data: {
-            messages: "登録完了、メールを確認してください",
-          },
-        };
-      case "POST_FAILED":
-        return {
-          ...state,
-          status: REQUEST_STATE.NG,
-          data: action.payload.errors,
-        };
-      default:
-        throw new Error();
-    }
-  };
-
-  const [postState, dispatch] = useReducer(reducer, initialState);
-
-  return [postState, dispatch];
+export const useUserCreate = (initialState) => {
+  const [postState, dispatch] = useReducer(postReducer, initialState);
+  return { postState: postState, dispatch: dispatch };
 };
 
 export const useBirthdaySelectReducer = (initialDateState) => {

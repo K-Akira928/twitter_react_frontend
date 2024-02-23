@@ -1,13 +1,14 @@
 import React from "react";
 
-export const SignupLayout = (props) => {
-  const { formHeader, handleSubmit, formBody } = props;
+export const SigninLayout = (props) => {
+  const { formHeader, formBody, handleSubmit, callToActionContents } = props;
 
   return (
     <>
       <div
         className={`
         modal-parent
+        overflow-hidden
       `}
       >
         <div
@@ -32,12 +33,25 @@ export const SignupLayout = (props) => {
               text-gray-300
               flex
               flex-col
-              md:overflow-y-scroll
-              `}
+              gap-10
+            `}
               onSubmit={handleSubmit}
             >
               {formBody}
             </form>
+            <div
+              className={`
+              h-full
+              px-24
+              py-4
+              text-gray-300
+              flex
+              flex-col
+              items-center
+            `}
+            >
+              {callToActionContents}
+            </div>
           </div>
         </div>
       </div>
