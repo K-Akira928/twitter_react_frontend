@@ -11,8 +11,10 @@ import { IoPeopleOutline } from "react-icons/io5";
 import { IoPersonOutline } from "react-icons/io5";
 import { CgMoreO } from "react-icons/cg";
 import { RiQuillPenLine } from "react-icons/ri";
+import { Link, useLocation } from "react-router-dom";
 
 export const SideNav = () => {
+  const location = useLocation();
   return (
     <>
       <div
@@ -182,7 +184,13 @@ export const SideNav = () => {
         md:hidden
       `}
       >
-        <RiQuillPenLine className="size-7" />
+        <Link
+          className="w-full h-full flex justify-center items-center"
+          to="/post"
+          state={{ backgroundLocation: location }}
+        >
+          <RiQuillPenLine className="size-7" />
+        </Link>
       </div>
       <div className="hidden md:h-full md:w-full md:flex md:flex-col md:justify-between md:items-center md:mt-8 md:mr-2">
         <div className="h-[50px] w-[230px] flex justify-center items-center">
@@ -193,8 +201,14 @@ export const SideNav = () => {
             xl:h-full xl:w-full
           `}
           >
-            <RiQuillPenLine className="size-7 xl:hidden" />
-            <span className="hidden xl:inline">ツイートする</span>
+            <Link
+              className="w-full h-full flex justify-center items-center"
+              to="/post"
+              state={{ backgroundLocation: location }}
+            >
+              <RiQuillPenLine className="size-7 xl:hidden" />
+              <span className="hidden xl:inline">ツイートする</span>
+            </Link>
           </button>
         </div>
         <div

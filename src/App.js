@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import { useSetRecoilState } from "recoil";
 import { loginState } from "./store/loginState";
 import { getValidateToken } from "./apis/auth";
+import { Post } from "./components/pages/Post";
 
 function App() {
   const location = useLocation();
@@ -46,6 +47,7 @@ function App() {
         <Routes>
           <Route path="/sign_up" element={<Signup />} />
           <Route path="/sign_in" element={<Signin />} />
+          <Route path="/post" element={<Post />} />
         </Routes>
       )}
     </>

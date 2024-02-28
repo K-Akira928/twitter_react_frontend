@@ -46,7 +46,10 @@ export const HomeLayout = (props) => {
           `}
           >
             <div className="hidden md:block md:px-5 md:py-2 md:border-b md:border-gray-500">
-              {tweetForm}
+              <div className="flex">
+                <div className="w-1/12"></div>
+                <div className="w-11/12">{tweetForm}</div>
+              </div>
             </div>
             {bodyContents}
           </div>

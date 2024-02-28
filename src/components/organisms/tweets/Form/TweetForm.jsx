@@ -81,9 +81,8 @@ export const TweetForm = () => {
   };
 
   return (
-    <form className="flex" onSubmit={handleSubmit}>
-      <div className="w-1/12"></div>
-      <div className="w-11/12">
+    <form onSubmit={handleSubmit}>
+      <div className="w-full">
         <div className="px-2">
           <textarea
             className={`
