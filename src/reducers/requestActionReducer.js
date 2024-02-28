@@ -14,6 +14,7 @@ export const postReducer = (state, action) => {
         ...state,
         status: "OK",
         data: action.payload,
+        errors: null,
       };
     case postingActionTypes.POST_FAILED:
       action.callback?.failed && action.callback.failed();
