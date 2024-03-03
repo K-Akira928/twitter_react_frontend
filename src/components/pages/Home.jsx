@@ -2,7 +2,8 @@ import React from "react";
 import { HomeLayout } from "../templates/HomeLayout";
 import { SideNav } from "../organisms/SideNav";
 import { IoIosSearch } from "react-icons/io";
-import { TweetForm } from "../organisms/tweets/Form/TweetForm";
+import { TweetForm } from "../organisms/tweets/form/TweetForm";
+import { TweetCard } from "../organisms/tweets/card/TweetCard";
 
 export const Home = () => {
   return (

@@ -2,7 +2,7 @@ import React from "react";
 import { PostLayout } from "../templates/PostLayout";
 import { RxCross2 } from "react-icons/rx";
 import { Link } from "react-router-dom";
-import { TweetForm } from "../organisms/tweets/Form/TweetForm";
+import { TweetForm } from "../organisms/tweets/form/TweetForm";
 
 export const Post = () => {
   return (
