@@ -5,6 +5,7 @@ export const HomeLayout = (props) => {
     sideNav,
     header,
     tweetForm,
+    loading,
     bodyContents,
     sideContentsHeader,
     sideContentsBody,

@@ -1,5 +1,6 @@
 import { useReducer } from "react";
-import { postReducer } from "../reducers/requestActionReducer";
+import { fetchReducer, postReducer } from "../reducers/requestActionReducer";
+import { useAuthFailedCall } from "./auth";
 
 export const useTweetCreate = (initialState) => {
   const [postState, dispatch] = useReducer(postReducer, initialState);
@@ -13,6 +14,20 @@ export const useTweetCreate = (initialState) => {
     postTweetDispatch: dispatch,
     callback: {
       success: successCallback,
+    },
+  };
+};
+
+export const useTweetsIndex = (initialState) => {
+  const [fetchState, dispatch] = useReducer(fetchReducer, initialState);
+
+  const failedCall = useAuthFailedCall();
+
+  return {
+    fetchTweetsState: fetchState,
+    fetchTweetsDispatch: dispatch,
+    callback: {
+      authFiled: failedCall,
     },
   };
 };

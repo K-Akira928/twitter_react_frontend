@@ -4,8 +4,37 @@ import { SideNav } from "../organisms/SideNav";
 import { IoIosSearch } from "react-icons/io";
 import { TweetForm } from "../organisms/tweets/form/TweetForm";
 import { TweetCard } from "../organisms/tweets/card/TweetCard";
+import { useTweetsIndex } from "../../hooks/tweets";
+import { REQUEST_STATE } from "../../constants";
+import { fetchingActionTypes } from "../../apis/base";
+import { fetchTweetsIndex } from "../../apis/tweets";
 
 export const Home = () => {
+  const initialFetchState = {
+    status: REQUEST_STATE.INITIAL,
+    data: [],
+  };
+  const { fetchTweetsState, fetchTweetsDispatch, callback } =
+    useTweetsIndex(initialFetchState);
+
+  useEffect(() => {
+    fetchTweetsDispatch({ type: fetchingActionTypes.FETCHING });
+
+    fetchTweetsIndex(currentPage).then((res) => {
+      window.scroll({
+        top: 0,
+        behavior: "smooth",
+      });
+
+      fetchTweetsDispatch({
+        type: res.type,
+        payload: res,
+        callback: {
+          authFiled: callback.authFiled,
+        },
+      });
+    });
+  }, [searchParams]);
   return (
     <HomeLayout
       sideNav={<SideNav />}
