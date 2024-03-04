@@ -1,11 +1,12 @@
 import React from "react";
 import { PostLayout } from "../templates/PostLayout";
 import { RxCross2 } from "react-icons/rx";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { TweetForm } from "../organisms/tweets/form/TweetForm";
 
 export const Post = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   return (
     <PostLayout
       formHeader={
@@ -22,7 +23,7 @@ export const Post = () => {
           </div>
         </div>
       }
-      formBody={<TweetForm />}
+      formBody={<TweetForm successAction={() => navigate("/home")} />}
     />
   );
 };

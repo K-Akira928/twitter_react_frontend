@@ -13,7 +13,9 @@ import { REQUEST_STATE } from "../../../../constants";
 import { postingActionTypes } from "../../../../apis/base";
 import { TweetImagePreview } from "./TweetImagePreview";
 
-export const TweetForm = () => {
+export const TweetForm = (props) => {
+  const { successAction } = props;
+
   const initialPostState = {
     status: REQUEST_STATE.INITIAL,
     data: [],
@@ -70,6 +72,7 @@ export const TweetForm = () => {
         payload: res,
         callback: {
           success: () => {
+            successAction();
             setTweetContentFlag(true);
             callback.success(e);
           },

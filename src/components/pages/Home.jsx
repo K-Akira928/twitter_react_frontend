@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { HomeLayout } from "../templates/HomeLayout";
 import { SideNav } from "../organisms/SideNav";
 import { IoIosSearch } from "react-icons/io";
@@ -24,15 +24,10 @@ export const Home = () => {
   const { fetchTweetsState, fetchTweetsDispatch, callback } =
     useTweetsIndex(initialFetchState);
 
-  useEffect(() => {
-    fetchTweetsDispatch({ type: fetchingActionTypes.FETCHING });
+  const handleFetchTweets = async () => {
+    await fetchTweetsDispatch({ type: fetchingActionTypes.FETCHING });
 
-    fetchTweetsIndex(currentPage).then((res) => {
-      window.scroll({
-        top: 0,
-        behavior: "smooth",
-      });
-
+    await fetchTweetsIndex(currentPage).then((res) => {
       fetchTweetsDispatch({
         type: res.type,
         payload: res,
@@ -41,6 +36,14 @@ export const Home = () => {
         },
       });
     });
+  };
+
+  useEffect(() => {
+    window.scroll({
+      top: 0,
+      behavior: "smooth",
+    });
+    handleFetchTweets();
   }, [searchParams]);
 
   const sideNavMemo = useMemo(() => <SideNav />, []);
@@ -82,7 +85,7 @@ export const Home = () => {
           </nav>
         </>
       }
-      tweetForm={<TweetForm />}
+      tweetForm={<TweetForm successAction={handleFetchTweets} />}
       loading={
         <>
           {fetchTweetsState.status === REQUEST_STATE.LOADING && (
