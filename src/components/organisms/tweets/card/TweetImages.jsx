@@ -15,7 +15,6 @@ export const TweetImages = (props) => {
               state={{
                 backgroundLocation: location,
                 images: images,
-                originUrl: location.pathname,
               }}
               images={images}
             >
@@ -32,7 +31,6 @@ export const TweetImages = (props) => {
               state={{
                 backgroundLocation: location,
                 images: images,
-                originUrl: location.pathname,
               }}
               images={images}
             >
@@ -53,7 +51,6 @@ export const TweetImages = (props) => {
             state={{
               backgroundLocation: location,
               images: images,
-              originUrl: location.pathname,
             }}
             images={images}
           >
@@ -75,7 +72,6 @@ export const TweetImages = (props) => {
               state={{
                 backgroundLocation: location,
                 images: images,
-                originUrl: location.pathname,
               }}
               images={images}
             >
@@ -94,7 +90,6 @@ export const TweetImages = (props) => {
                 state={{
                   backgroundLocation: location,
                   images: images,
-                  originUrl: location.pathname,
                 }}
                 images={images}
               >
@@ -111,7 +106,6 @@ export const TweetImages = (props) => {
                 state={{
                   backgroundLocation: location,
                   images: images,
-                  originUrl: location.pathname,
                 }}
                 images={images}
               >

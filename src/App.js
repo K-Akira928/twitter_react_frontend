@@ -9,6 +9,7 @@ import { useSetRecoilState } from "recoil";
 import { loginState } from "./store/loginState";
 import { getValidateToken } from "./apis/auth";
 import { Post } from "./components/pages/Post";
+import { Photo } from "./components/pages/Photo";
 
 function App() {
   const location = useLocation();
@@ -48,6 +49,7 @@ function App() {
           <Route path="/sign_up" element={<Signup />} />
           <Route path="/sign_in" element={<Signin />} />
           <Route path="/post" element={<Post />} />
+          <Route path="/photo/:id" element={<Photo />} />
         </Routes>
       )}
     </>

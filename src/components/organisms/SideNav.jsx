@@ -204,7 +204,9 @@ export const SideNav = () => {
             <Link
               className="w-full h-full flex justify-center items-center"
               to="/post"
-              state={{ backgroundLocation: location }}
+              state={{
+                backgroundLocation: location,
+              }}
             >
               <RiQuillPenLine className="size-7 xl:hidden" />
               <span className="hidden xl:inline">ツイートする</span>

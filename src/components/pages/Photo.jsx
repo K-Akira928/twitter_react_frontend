@@ -9,7 +9,11 @@ export const Photo = () => {
   const navigate = useNavigate();
 
   const hanldeModalClose = (e) => {
-    e.target === e.currentTarget && navigate(location.state.originUrl);
+    e.target === e.currentTarget &&
+      navigate(
+        location.state.backgroundLocation.pathname +
+          location.state.backgroundLocation.search
+      );
   };
 
   return (
@@ -38,7 +42,10 @@ export const Photo = () => {
             flex justify-center items-center
             rounded-full
             `}
-            to={location.state.originUrl}
+            to={
+              location.state.backgroundLocation.pathname +
+              location.state.backgroundLocation.search
+            }
           >
             <RxCross2 />
           </Link>
@@ -56,7 +63,6 @@ export const Photo = () => {
               state={{
                 backgroundLocation: location.state.backgroundLocation,
                 images: location.state.images,
-                originUrl: location.state.originUrl,
               }}
             >
               <FaArrowLeft />
@@ -75,7 +81,6 @@ export const Photo = () => {
               state={{
                 backgroundLocation: location.state.backgroundLocation,
                 images: location.state.images,
-                originUrl: location.state.originUrl,
               }}
             >
               <FaArrowRight />
