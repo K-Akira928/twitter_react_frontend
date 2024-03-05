@@ -9,7 +9,7 @@ import { REQUEST_STATE } from "../../constants";
 import { fetchingActionTypes } from "../../apis/base";
 import { fetchTweetsIndex } from "../../apis/tweets";
 import { Pagination } from "../organisms/Pagination";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 export const Home = () => {
   const initialFetchState = {
@@ -99,7 +99,7 @@ export const Home = () => {
         <>
           {fetchTweetsState.data?.tweets &&
             fetchTweetsState.data?.tweets.map((tweet) => (
-              <div className="border-b border-gray-500" key={tweet.id}>
+              <div className="border-b border-gray-500 relative" key={tweet.id}>
                 <TweetCard tweet={tweet} />
               </div>
             ))}

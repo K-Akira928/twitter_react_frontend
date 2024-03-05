@@ -7,12 +7,17 @@ import { LuBookmark } from "react-icons/lu";
 import { BiBarChart } from "react-icons/bi";
 import { MdOutlineFileUpload } from "react-icons/md";
 import { TweetImages } from "./TweetImages";
+import { Link } from "react-router-dom";
 
 export const TweetCard = (props) => {
   const { tweet } = props;
 
   return (
     <div className="flex px-4 pt-3 pb-1 hover:bg-white hover:bg-opacity-5 hover:cursor-pointer">
+      <Link
+        className="w-full h-full absolute top-0 left-0"
+        to={`/tweets/${tweet.id}`}
+      />
       <div className="w-1/12">
         <div className="w-11/12">
           {tweet.user.icon ? (
@@ -44,9 +49,16 @@ export const TweetCard = (props) => {
               })}
             </span>
           </div>
-          <div className="h-full flex items-center pr-2">
+          <button
+            className={`
+            size-8 z-20
+            flex justify-center items-center
+            rounded-full
+            hover:bg-white hover:bg-opacity-5 hover:cursor-pointer
+          `}
+          >
             <IoIosMore className="size-5 text-gray-400" />
-          </div>
+          </button>
         </div>
         <span className="px-2 break-words whitespace-pre-wrap">
           {tweet.content}
@@ -56,77 +68,77 @@ export const TweetCard = (props) => {
             </div>
           ) : null}
         </span>
-        <div className="text-gray-400 flex justify-between mt-2">
+        <div className="text-gray-400 flex justify-between mt-2 z-10">
           <div className="w-9/12 flex justify-between">
-            <a
+            <Link
               className={`
               size-9
               flex justify-center items-center
               rounded-full
               transition
               hover:bg-sky-500 hover:bg-opacity-20 hover:text-sky-500`}
-              href="/"
+              to="/"
             >
               <BiMessageRounded className="w-[20px] h-[20px]" />
-            </a>
-            <a
+            </Link>
+            <Link
               className={`
               size-9
               flex justify-center items-center
               rounded-full
               transition
               hover:bg-green-500 hover:bg-opacity-20 hover:text-green-500`}
-              href="/"
+              to="/"
             >
               <FaRetweet className="w-[20px] h-[20px]" />
-            </a>
-            <a
+            </Link>
+            <Link
               className={`
               size-9
               flex justify-center items-center
               rounded-full
               transition
               hover:bg-pink-500 hover:bg-opacity-20 hover:text-pink-500`}
-              href="/"
+              to="/"
             >
               <MdFavoriteBorder className="w-[20px] h-[20px]" />
-            </a>
-            <a
+            </Link>
+            <Link
               className={`
               size-9
               flex justify-center items-center
               rounded-full
               transition
               hover:bg-sky-500 hover:bg-opacity-20 hover:text-sky-500`}
-              href="/"
+              to="/"
             >
               <BiBarChart className="w-[20px] h-[20px]" />
-            </a>
+            </Link>
           </div>
 
           <div className="w-2/12 flex justify-end">
-            <a
+            <Link
               className={`
               size-9
               flex justify-center items-center
               rounded-full
               transition
               hover:bg-sky-500 hover:bg-opacity-20 hover:text-sky-500`}
-              href="/"
+              to="/"
             >
               <LuBookmark className="w-[20px] h-[20px]" />
-            </a>
-            <a
+            </Link>
+            <Link
               className={`
               size-9
               flex justify-center items-center
               rounded-full
               transition
               hover:bg-sky-500 hover:bg-opacity-20 hover:text-sky-500`}
-              href="/"
+              to="/"
             >
               <MdOutlineFileUpload className="w-[20px] h-[20px]" />
-            </a>
+            </Link>
           </div>
         </div>
       </div>
