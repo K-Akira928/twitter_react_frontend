@@ -1,6 +1,6 @@
 import React from "react";
 
-export const TweetsLayout = (props) => {
+export const ShowTweetLayout = (props) => {
   const {
     sideNav,
     header,

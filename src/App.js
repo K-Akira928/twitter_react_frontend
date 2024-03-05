@@ -10,7 +10,7 @@ import { loginState } from "./store/loginState";
 import { getValidateToken } from "./apis/auth";
 import { Post } from "./components/pages/Post";
 import { Photo } from "./components/pages/Photo";
-import { Tweets } from "./components/pages/Tweets";
+import { ShowTweet } from "./components/pages/ShowTweet";
 
 function App() {
   const location = useLocation();
@@ -43,7 +43,7 @@ function App() {
         <Route path="/sign_up" element={<Signup />} />
         <Route path="/sign_in" element={<Signin />} />
         <Route path="/home" element={<Home />} />
-        <Route path="/tweets/:id" element={<Tweets />} />
+        <Route path="/tweets/:id" element={<ShowTweet />} />
       </Routes>
 
       {backgroundLocation && (

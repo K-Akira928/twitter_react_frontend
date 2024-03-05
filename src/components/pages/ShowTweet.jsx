@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { TweetsLayout } from "../templates/TweetsLayout";
+import { ShowTweetLayout } from "../templates/ShowTweetLayout";
 import { Link, useParams } from "react-router-dom";
 import { SideNav } from "../organisms/SideNav";
 import { IoIosSearch } from "react-icons/io";
@@ -10,7 +10,7 @@ import { fetchingActionTypes } from "../../apis/base";
 import { fetchTweetsShow } from "../../apis/tweets";
 import { TweetCard } from "../organisms/tweets/card/TweetCard";
 
-export const Tweets = () => {
+export const ShowTweet = () => {
   const initialFetchState = {
     status: REQUEST_STATE.INITIAL,
     data: [],
@@ -39,7 +39,7 @@ export const Tweets = () => {
   }, []);
 
   return (
-    <TweetsLayout
+    <ShowTweetLayout
       sideNav={<SideNav />}
       header={
         <>
