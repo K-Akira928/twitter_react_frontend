@@ -1,9 +1,9 @@
 import React, { memo } from "react";
-import { ImageWithAction } from "../../molecules/ImageWithAction";
+import { ImageWithAction } from "../../../molecules/ImageWithAction";
 import { RxCross2 } from "react-icons/rx";
-import { IconWithCircleButton } from "../../molecules/IconWithCircleButton";
+import { IconWithCircleButton } from "../../../molecules/IconWithCircleButton";
 
-export const TweetImages = memo((props) => {
+export const TweetImagePreview = memo((props) => {
   const { imageFiles, length, handleDelete } = props;
 
   return (

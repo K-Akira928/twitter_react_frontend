@@ -1,13 +1,56 @@
-import React from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { HomeLayout } from "../templates/HomeLayout";
 import { SideNav } from "../organisms/SideNav";
 import { IoIosSearch } from "react-icons/io";
-import { TweetForm } from "../organisms/tweets/Form/TweetForm";
+import { TweetForm } from "../organisms/tweets/form/TweetForm";
+import { TweetCard } from "../organisms/tweets/card/TweetCard";
+import { useTweetsIndex } from "../../hooks/tweets";
+import { REQUEST_STATE } from "../../constants";
+import { fetchingActionTypes } from "../../apis/base";
+import { fetchTweetsIndex } from "../../apis/tweets";
+import { Pagination } from "../organisms/Pagination";
+import { useSearchParams } from "react-router-dom";
 
 export const Home = () => {
+  const initialFetchState = {
+    status: REQUEST_STATE.INITIAL,
+    data: [],
+  };
+
+  const [searchParams] = useSearchParams();
+
+  const currentPage = searchParams.get("page") || 0;
+
+  const { fetchTweetsState, fetchTweetsDispatch, callback } =
+    useTweetsIndex(initialFetchState);
+
+  const handleFetchTweets = async () => {
+    await fetchTweetsDispatch({ type: fetchingActionTypes.FETCHING });
+
+    await fetchTweetsIndex(currentPage).then((res) => {
+      fetchTweetsDispatch({
+        type: res.type,
+        payload: res,
+        callback: {
+          authFiled: callback.authFiled,
+        },
+      });
+    });
+  };
+
+  useEffect(() => {
+    window.scroll({
+      top: 0,
+      behavior: "smooth",
+    });
+    handleFetchTweets();
+  }, [searchParams]);
+
+  const sideNavMemo = useMemo(() => <SideNav />, []);
+
   return (
     <HomeLayout
-      sideNav={<SideNav />}
+      sideNav={sideNavMemo}
       header={
         <>
           <div
@@ -42,8 +85,36 @@ export const Home = () => {
           </nav>
         </>
       }
-      tweetForm={<TweetForm />}
-      bodyContents={<div>body</div>}
+      tweetForm={<TweetForm successAction={handleFetchTweets} />}
+      loading={
+        <>
+          {fetchTweetsState.status === REQUEST_STATE.LOADING && (
+            <div className="flex justify-center py-10 h-screen">
+              <div className="loading"></div>
+            </div>
+          )}
+        </>
+      }
+      bodyContents={
+        <>
+          {fetchTweetsState.data?.tweets &&
+            fetchTweetsState.data?.tweets.map((tweet) => (
+              <div className="border-b border-gray-500" key={tweet.id}>
+                <TweetCard tweet={tweet} />
+              </div>
+            ))}
+        </>
+      }
+      pagination={
+        <>
+          {fetchTweetsState.status === REQUEST_STATE.OK && (
+            <Pagination
+              next={fetchTweetsState.data.next}
+              afterNext={fetchTweetsState.data.after_next}
+            />
+          )}
+        </>
+      }
       sideContentsHeader={
         <div className="h-full flex justify-center items-center bg-black">
           <div

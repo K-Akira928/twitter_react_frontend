@@ -8,6 +8,13 @@ export const postingActionTypes = {
   POST_FAILED: "POST_FAILED",
 };
 
+export const fetchingActionTypes = {
+  FETCHING: "FETCHING",
+  FETCH_SUCCESS: "FETCH_SUCCESS",
+  FETCH_FAILED: "FETCH_FAILED",
+  AUTH_FAILED: "AUTH_FAILED",
+};
+
 export const baseAxios = axios.create({
   baseURL: DEFAULT_API_LOCALHOST,
 });
@@ -20,3 +27,18 @@ export const baseAxiosWithAuthHeaders = axios.create({
     uid: Cookies.get("uid"),
   },
 });
+
+baseAxiosWithAuthHeaders.interceptors.response.use(
+  (res) => {
+    return res;
+  },
+  (e) => {
+    if (e.response.status === 401) {
+      return Promise.reject({
+        isLogin: false,
+      });
+    } else {
+      return Promise.reject(e);
+    }
+  }
+);
