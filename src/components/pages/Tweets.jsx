@@ -1,13 +1,43 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { TweetsLayout } from "../templates/TweetsLayout";
 import { Link, useParams } from "react-router-dom";
 import { SideNav } from "../organisms/SideNav";
 import { IoIosSearch } from "react-icons/io";
 import { FaArrowLeft } from "react-icons/fa6";
+import { useTweetsShow } from "../../hooks/tweets";
+import { REQUEST_STATE } from "../../constants";
+import { fetchingActionTypes } from "../../apis/base";
+import { fetchTweetsShow } from "../../apis/tweets";
+import { TweetCard } from "../organisms/tweets/card/TweetCard";
 
 export const Tweets = () => {
+  const initialFetchState = {
+    status: REQUEST_STATE.INITIAL,
+    data: [],
+  };
+
   const { id } = useParams();
-  console.log(id);
+
+  const { fetchTweetState, fetchTweetDispatch, callback } =
+    useTweetsShow(initialFetchState);
+
+  useEffect(() => {
+    window.scroll({
+      top: 0,
+    });
+    fetchTweetDispatch({ type: fetchingActionTypes.FETCHING });
+
+    fetchTweetsShow(id).then((res) => {
+      fetchTweetDispatch({
+        type: res.type,
+        payload: res,
+        callback: {
+          authFiled: callback.authFiled,
+        },
+      });
+    });
+  }, []);
+
   return (
     <TweetsLayout
       sideNav={<SideNav />}
@@ -29,7 +59,22 @@ export const Tweets = () => {
           </nav>
         </>
       }
-      bodyContents={<div className="h-screen">body</div>}
+      loading={
+        <>
+          {fetchTweetState.status === REQUEST_STATE.LOADING && (
+            <div className="flex justify-center py-10 h-screen">
+              <div className="loading"></div>
+            </div>
+          )}
+        </>
+      }
+      bodyContents={
+        fetchTweetState.status === REQUEST_STATE.OK && (
+          <div className="h-screen">
+            <TweetCard tweet={fetchTweetState.data.tweet} type="show" />
+          </div>
+        )
+      }
       sideContentsHeader={
         <div className="h-full flex justify-center items-center bg-black">
           <div
