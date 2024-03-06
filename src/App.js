@@ -11,6 +11,7 @@ import { getValidateToken } from "./apis/auth";
 import { Post } from "./components/pages/Post";
 import { Photo } from "./components/pages/Photo";
 import { ShowTweet } from "./components/pages/ShowTweet";
+import { Profile } from "./components/pages/Profile";
 
 function App() {
   const location = useLocation();
@@ -44,6 +45,7 @@ function App() {
         <Route path="/sign_in" element={<Signin />} />
         <Route path="/home" element={<Home />} />
         <Route path="/tweets/:id" element={<ShowTweet />} />
+        <Route path="/:name" element={<Profile />} />
       </Routes>
 
       {backgroundLocation && (

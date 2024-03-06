@@ -1,9 +1,24 @@
 import { useReducer } from "react";
-import { postReducer } from "../reducers/requestActionReducer";
+import { fetchReducer, postReducer } from "../reducers/requestActionReducer";
+import { useAuthFailedCall } from "./auth";
 
 export const useUserCreate = (initialState) => {
   const [postState, dispatch] = useReducer(postReducer, initialState);
   return { postState: postState, dispatch: dispatch };
+};
+
+export const useUsersShow = (initialState) => {
+  const [fetchState, dispatch] = useReducer(fetchReducer, initialState);
+
+  const failedCall = useAuthFailedCall();
+
+  return {
+    fetchUserState: fetchState,
+    fetchUserDispatch: dispatch,
+    callback: {
+      authFiled: failedCall,
+    },
+  };
 };
 
 export const useBirthdaySelectReducer = (initialDateState) => {
