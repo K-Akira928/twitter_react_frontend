@@ -1,5 +1,9 @@
 import { useReducer } from "react";
-import { fetchReducer, postReducer } from "../reducers/requestActionReducer";
+import {
+  fetchReducer,
+  patchReducer,
+  postReducer,
+} from "../reducers/requestActionReducer";
 import { useAuthFailedCall } from "./auth";
 
 export const useUserCreate = (initialState) => {
@@ -16,6 +20,22 @@ export const useUsersShow = (initialState) => {
     fetchUserState: fetchState,
     fetchUserDispatch: dispatch,
     callback: {
+      authFiled: failedCall,
+    },
+  };
+};
+
+export const useUsersUpdate = (initialState) => {
+  const [patchState, dispatch] = useReducer(patchReducer, initialState);
+
+  const successCallback = () => {};
+  const failedCall = useAuthFailedCall();
+
+  return {
+    patchUserState: patchState,
+    patchUserDispatch: dispatch,
+    callback: {
+      success: successCallback,
       authFiled: failedCall,
     },
   };

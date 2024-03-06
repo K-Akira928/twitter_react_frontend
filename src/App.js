@@ -12,6 +12,7 @@ import { Post } from "./components/pages/Post";
 import { Photo } from "./components/pages/Photo";
 import { ShowTweet } from "./components/pages/ShowTweet";
 import { Profile } from "./components/pages/Profile";
+import { EditProfile } from "./components/pages/EditProfile";
 
 function App() {
   const location = useLocation();
@@ -54,6 +55,9 @@ function App() {
           <Route path="/sign_in" element={<Signin />} />
           <Route path="/post" element={<Post />} />
           <Route path="/photo/:id" element={<Photo />} />
+          <Route path="/settings/*">
+            <Route path="profile" element={<EditProfile />} />
+          </Route>
         </Routes>
       )}
     </>

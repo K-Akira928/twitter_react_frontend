@@ -3,6 +3,7 @@ import {
   baseAxios,
   baseAxiosWithAuthHeaders,
   fetchingActionTypes,
+  patchActionTypes,
 } from "./base";
 
 export const usersActionTypes = {
@@ -53,5 +54,18 @@ export const fetchUsersShow = (name) => {
         ? fetchingActionTypes.FETCH_FAILED
         : fetchingActionTypes.AUTH_FAILED,
       errors: e,
+    }));
+};
+
+export const patchUsersUpdate = (name, formData) => {
+  return baseAxiosWithAuthHeaders
+    .patch(`${users}/${name}`, formData)
+    .then((res) => ({
+      type: patchActionTypes.PATCH_SUCCESS,
+      data: res,
+    }))
+    .catch((e) => ({
+      type: patchActionTypes.PATCH_FAILED,
+      errors: e.response.data.errors,
     }));
 };
