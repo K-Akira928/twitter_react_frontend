@@ -30,32 +30,37 @@ export const TweetCard = (props) => {
             to={`/tweets/${tweet.id}`}
           />
         )}
-        <div className="w-1/12">
-          <div className="w-11/12">
+        <Link to={`/${tweet.user.name}`} className="size-[40px] mt-2 z-20">
+          <div className="w-full h-full">
             {tweet.user.icon ? (
               <img
-                className="rounded-full"
+                className="rounded-full h-full w-full"
                 src={tweet.user.icon}
                 alt="userIcon"
               />
             ) : (
               <img
-                className="rounded-full"
+                className="rounded-full h-full w-full"
                 src="https://placehold.jp/400x400.png"
                 alt="userDefaultIcon"
               />
             )}
           </div>
-        </div>
+        </Link>
         <div className="w-11/12 flex flex-col">
           <div className="flex justify-between">
-            <div className="px-2">
-              <span className="font-semibold mr-2">{tweet.user.nickname}</span>
+            <div className="px-2 z-20">
+              <Link to={`/${tweet.user.name}`} className="font-semibold mr-2">
+                {tweet.user.nickname}
+              </Link>
               {type === "index" ? (
                 <>
-                  <span className="text-gray-400 text-sm mr-2">
+                  <Link
+                    to={`/${tweet.user.name}`}
+                    className="text-gray-400 text-sm mr-2"
+                  >
                     @{tweet.user.name}
-                  </span>
+                  </Link>
                   <span className="text-gray-400 text-sm">
                     {new Date(tweet.created_at).toLocaleDateString("ja-JP", {
                       month: "short",
@@ -64,7 +69,11 @@ export const TweetCard = (props) => {
                   </span>
                 </>
               ) : (
-                <p className="text-gray-400">@{tweet.user.name}</p>
+                <div>
+                  <Link to={`/${tweet.user.name}`} className="text-gray-400">
+                    @{tweet.user.name}
+                  </Link>
+                </div>
               )}
             </div>
             <button
