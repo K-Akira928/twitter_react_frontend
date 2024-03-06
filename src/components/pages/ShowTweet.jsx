@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { ShowTweetLayout } from "../templates/ShowTweetLayout";
-import { Link, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { SideNav } from "../organisms/SideNav";
 import { IoIosSearch } from "react-icons/io";
 import { FaArrowLeft } from "react-icons/fa6";
@@ -15,6 +15,8 @@ export const ShowTweet = () => {
     status: REQUEST_STATE.INITIAL,
     data: [],
   };
+
+  const navigate = useNavigate();
 
   const { id } = useParams();
 
@@ -38,6 +40,10 @@ export const ShowTweet = () => {
     });
   }, []);
 
+  const handlePrevClick = () => {
+    navigate(-1);
+  };
+
   return (
     <ShowTweetLayout
       sideNav={<SideNav />}
@@ -51,9 +57,9 @@ export const ShowTweet = () => {
           `}
           >
             <div className="flex justify-center items-center px-4">
-              <Link className="mr-8" to="/home">
+              <button className="mr-8" onClick={handlePrevClick}>
                 <FaArrowLeft />
-              </Link>
+              </button>
               <span className="font-bold text-xl">ツイートする</span>
             </div>
           </nav>
