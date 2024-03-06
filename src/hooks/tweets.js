@@ -31,3 +31,17 @@ export const useTweetsIndex = (initialState) => {
     },
   };
 };
+
+export const useTweetsShow = (initialState) => {
+  const [fetchState, dispatch] = useReducer(fetchReducer, initialState);
+
+  const failedCall = useAuthFailedCall();
+
+  return {
+    fetchTweetState: fetchState,
+    fetchTweetDispatch: dispatch,
+    callback: {
+      authFiled: failedCall,
+    },
+  };
+};

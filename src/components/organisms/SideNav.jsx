@@ -42,19 +42,20 @@ export const SideNav = () => {
         >
           <FaXTwitter className="size-7" />
         </div>
-        <div
+        <Link
           className={`
           w-[50px] h-[50px]
           flex items-center justify-center
           xl:w-[260px] xl:h-[58px]
           xl:justify-start
         `}
+          to="/home"
         >
           <TextWithIcon
             icon={<GoHomeFill className="size-7" />}
             text="ホーム"
           />
-        </div>
+        </Link>
         <div
           className={`
           w-[50px] h-[50px]

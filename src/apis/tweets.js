@@ -38,3 +38,22 @@ export const fetchTweetsIndex = (page) => {
       errors: e,
     }));
 };
+
+export const fetchTweetsShow = (id) => {
+  return baseAxiosWithAuthHeaders
+    .get(tweets + `/${id}`, {
+      params: {
+        id: id,
+      },
+    })
+    .then((res) => ({
+      type: fetchingActionTypes.FETCH_SUCCESS,
+      data: res.data,
+    }))
+    .catch((e) => ({
+      type: e.isLogin
+        ? fetchingActionTypes.FETCH_FAILED
+        : fetchingActionTypes.AUTH_FAILED,
+      errors: e,
+    }));
+};
