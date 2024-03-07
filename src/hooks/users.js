@@ -20,6 +20,7 @@ export const useUsersShow = (initialState) => {
     fetchUserState: fetchState,
     fetchUserDispatch: dispatch,
     callback: {
+      success: null,
       authFiled: failedCall,
     },
   };

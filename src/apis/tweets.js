@@ -57,3 +57,9 @@ export const fetchTweetsShow = (id) => {
       errors: e,
     }));
 };
+
+export const deleteTweetsDestroy = (id) => {
+  return baseAxiosWithAuthHeaders.delete(`${tweets}/${id}`).then((res) => {
+    return res.data.deleted_id;
+  });
+};

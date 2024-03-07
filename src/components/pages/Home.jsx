@@ -7,7 +7,7 @@ import { TweetCard } from "../organisms/tweets/card/TweetCard";
 import { useTweetsIndex } from "../../hooks/tweets";
 import { REQUEST_STATE } from "../../constants";
 import { fetchingActionTypes } from "../../apis/base";
-import { fetchTweetsIndex } from "../../apis/tweets";
+import { deleteTweetsDestroy, fetchTweetsIndex } from "../../apis/tweets";
 import { Pagination } from "../organisms/Pagination";
 import { useSearchParams } from "react-router-dom";
 
@@ -24,6 +24,8 @@ export const Home = () => {
   const { fetchTweetsState, fetchTweetsDispatch, callback } =
     useTweetsIndex(initialFetchState);
 
+  const [tweets, setTweets] = useState([]);
+
   const handleFetchTweets = async () => {
     await fetchTweetsDispatch({ type: fetchingActionTypes.FETCHING });
 
@@ -32,11 +34,22 @@ export const Home = () => {
         type: res.type,
         payload: res,
         callback: {
+          success: () => {
+            setTweets(res.data.tweets);
+          },
           authFiled: callback.authFiled,
         },
       });
     });
   };
+
+  const handleTweetDelete = (id) => {
+    deleteTweetsDestroy(id).then((deleteId) => {
+      setTweets([...tweets].filter((tweet) => tweet.id !== Number(deleteId)));
+    });
+  };
+
+  console.log(tweets);
 
   useEffect(() => {
     window.scroll({
@@ -96,14 +109,16 @@ export const Home = () => {
         </>
       }
       bodyContents={
-        <>
-          {fetchTweetsState.data?.tweets &&
-            fetchTweetsState.data?.tweets.map((tweet) => (
-              <div className="border-b border-gray-500 relative" key={tweet.id}>
-                <TweetCard tweet={tweet} type="index" />
-              </div>
-            ))}
-        </>
+        fetchTweetsState.status === REQUEST_STATE.OK &&
+        tweets.map((tweet) => (
+          <div className="border-b border-gray-500 relative" key={tweet.id}>
+            <TweetCard
+              tweet={tweet}
+              type="index"
+              handleTweetDelete={() => handleTweetDelete(tweet.id)}
+            />
+          </div>
+        ))
       }
       pagination={
         <>
