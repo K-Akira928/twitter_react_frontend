@@ -1,5 +1,10 @@
 import { users } from "../urls";
-import { baseAxios } from "./base";
+import {
+  baseAxios,
+  baseAxiosWithAuthHeaders,
+  fetchingActionTypes,
+  patchActionTypes,
+} from "./base";
 
 export const usersActionTypes = {
   POSTING: "POSTING",
@@ -31,6 +36,36 @@ export const postRgistrationCreate = (formData) => {
     }))
     .catch((e) => ({
       type: usersActionTypes.POST_FAILED,
+      errors: e.response.data.errors,
+    }));
+};
+
+export const fetchUsersShow = (name) => {
+  return baseAxiosWithAuthHeaders
+    .get(users + `/${name}`, {
+      params: { name: name },
+    })
+    .then((res) => ({
+      type: fetchingActionTypes.FETCH_SUCCESS,
+      data: res.data,
+    }))
+    .catch((e) => ({
+      type: e.isLogin
+        ? fetchingActionTypes.FETCH_FAILED
+        : fetchingActionTypes.AUTH_FAILED,
+      errors: e,
+    }));
+};
+
+export const patchUsersUpdate = (name, formData) => {
+  return baseAxiosWithAuthHeaders
+    .patch(`${users}/${name}`, formData)
+    .then((res) => ({
+      type: patchActionTypes.PATCH_SUCCESS,
+      data: res,
+    }))
+    .catch((e) => ({
+      type: patchActionTypes.PATCH_FAILED,
       errors: e.response.data.errors,
     }));
 };

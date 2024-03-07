@@ -15,6 +15,13 @@ export const fetchingActionTypes = {
   AUTH_FAILED: "AUTH_FAILED",
 };
 
+export const patchActionTypes = {
+  PATCHING: "PATCHING",
+  PATCH_SUCCESS: "PATCH_SUCCESS",
+  PATCH_FAILED: "PATCH_FAILED",
+  AUTH_FAILED: "AUTH_FAILED",
+};
+
 export const baseAxios = axios.create({
   baseURL: DEFAULT_API_LOCALHOST,
 });
