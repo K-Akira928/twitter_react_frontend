@@ -9,13 +9,17 @@ import { REQUEST_STATE } from "../../constants";
 import { fetchingActionTypes } from "../../apis/base";
 import { deleteTweetsDestroy, fetchTweetsIndex } from "../../apis/tweets";
 import { Pagination } from "../organisms/Pagination";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import { currentUserState } from "../../store/currentUser";
 
 export const Home = () => {
   const initialFetchState = {
     status: REQUEST_STATE.INITIAL,
     data: [],
   };
+
+  const currentUser = useRecoilValue(currentUserState);
 
   const [searchParams] = useSearchParams();
 
@@ -48,8 +52,6 @@ export const Home = () => {
       setTweets([...tweets].filter((tweet) => tweet.id !== Number(deleteId)));
     });
   };
-
-  console.log(tweets);
 
   useEffect(() => {
     window.scroll({
@@ -97,6 +99,25 @@ export const Home = () => {
             </span>
           </nav>
         </>
+      }
+      tweetFormIcon={
+        <div className="size-[40px] mt-3">
+          <Link to={`/${currentUser.name}`}>
+            {currentUser.icon ? (
+              <img
+                className="object-cover rounded-full"
+                src={currentUser.icon}
+                alt="currentUserIcon"
+              />
+            ) : (
+              <img
+                className="object-cover rounded-full"
+                src="https://placehold.jp/400x400.png"
+                alt="currentUserDefaultIcon"
+              />
+            )}
+          </Link>
+        </div>
       }
       tweetForm={<TweetForm successAction={handleFetchTweets} />}
       loading={
