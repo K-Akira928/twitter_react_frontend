@@ -6,12 +6,24 @@ import { MdFavoriteBorder } from "react-icons/md";
 import { LuBookmark } from "react-icons/lu";
 import { BiBarChart } from "react-icons/bi";
 import { MdOutlineFileUpload } from "react-icons/md";
+import { BsPin } from "react-icons/bs";
+import { BsStars } from "react-icons/bs";
+import { RiFileList2Fill } from "react-icons/ri";
+import { BsFillPersonXFill } from "react-icons/bs";
+import { BiSolidVolumeMute } from "react-icons/bi";
+import { MdOutlineBlock } from "react-icons/md";
+import { ImEmbed2 } from "react-icons/im";
+import { RiFlag2Line } from "react-icons/ri";
 import { TweetImages } from "./TweetImages";
 import { Link } from "react-router-dom";
 import { FaTrashCan } from "react-icons/fa6";
+import { useRecoilValue } from "recoil";
+import { currentUserState } from "../../../../store/currentUser";
 
 export const TweetCard = (props) => {
   const { tweet, type, handleTweetDelete } = props;
+
+  const currentUser = useRecoilValue(currentUserState);
 
   const [menuOepn, setMenuOpen] = useState(false);
 
@@ -94,10 +106,10 @@ export const TweetCard = (props) => {
                   className="w-full h-full fixed top-0 left-0 hover:cursor-default z-30"
                   onClick={handleTweetMenuClose}
                 ></div>
-                <div className={`${type === "show" && "relative"}`}>
+                <div className={`${type === "show" && "w-[400px] relative"}`}>
                   <div
                     className={`
-                    w-[300px] z-40
+                    z-40
                     bg-black
                     absolute top-3 right-3
                     drop-shadow-[0_0_3px_rgba(255,255,255,0.5)]
@@ -107,23 +119,76 @@ export const TweetCard = (props) => {
                     <div
                       className={`
                       flex flex-col justify-center
-                      items-start font-bold
+                      items-start font-bold text-[15px]
                       py-5 px-3 gap-y-5
                     `}
                     >
-                      <button
-                        className="text-red-500 w-full flex items-center gap-x-1"
-                        onClick={handleTweetDelete}
-                      >
-                        <FaTrashCan />
-                        削除
-                      </button>
-                      <span>プロフィールに固定表示しない</span>
-                      <span>プロフィールのハイライト</span>
-                      <span>nameさんをリストに追加/削除</span>
-                      <span>返信できるユーザーを変更</span>
-                      <span>ポストのエンゲージメントを表示</span>
-                      <span>ポストのアナリティクスを表示</span>
+                      {currentUser.id === tweet.user.id ? (
+                        <>
+                          <button
+                            className="text-red-500 w-full flex items-center gap-x-2"
+                            onClick={handleTweetDelete}
+                          >
+                            <FaTrashCan />
+                            削除
+                          </button>
+                          <span className="flex items-center gap-x-2">
+                            <BsPin size={19} />
+                            プロフィールに固定表示しない
+                          </span>
+                          <span className="flex items-center gap-x-2">
+                            <BsStars size={19} />
+                            プロフィールのハイライト
+                          </span>
+                          <span className="flex items-center gap-x-2">
+                            <RiFileList2Fill size={19} />@{tweet.user.name}
+                            さんをリストに追加/削除
+                          </span>
+                          <span className="flex items-center gap-x-2">
+                            <BiMessageRounded size={19} />
+                            返信できるユーザーを変更
+                          </span>
+                          <span className="flex items-center gap-x-2">
+                            <BiBarChart size={19} />
+                            ポストのエンゲージメントを表示
+                          </span>
+                          <span className="flex items-center gap-x-2">
+                            <RiFlag2Line size={19} />
+                            ポストのアナリティクスを表示
+                          </span>
+                        </>
+                      ) : (
+                        <>
+                          <span className="flex items-center gap-x-2">
+                            <BsFillPersonXFill size={19} />@{tweet.user.name}
+                            さんのフォローを解除
+                          </span>
+                          <span className="flex items-center gap-x-2">
+                            <RiFileList2Fill size={19} />@{tweet.user.name}
+                            さんをリストに追加/削除
+                          </span>
+                          <span className="flex items-center gap-x-2">
+                            <BiSolidVolumeMute size={19} />@{tweet.user.name}
+                            さんをミュート
+                          </span>
+                          <span className="flex items-center gap-x-2">
+                            <MdOutlineBlock size={19} />@{tweet.user.name}
+                            さんをブロック
+                          </span>
+                          <span className="flex items-center gap-x-2">
+                            <BiBarChart size={19} />
+                            ポストのエンゲージメントを表示
+                          </span>
+                          <span className="flex items-center gap-x-2">
+                            <ImEmbed2 size={19} />
+                            ポストを埋め込む
+                          </span>
+                          <span className="flex items-center gap-x-2">
+                            <BiBarChart size={19} />
+                            ポストを報告
+                          </span>
+                        </>
+                      )}
                     </div>
                   </div>
                 </div>
