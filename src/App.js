@@ -7,12 +7,13 @@ import { Home } from "./components/pages/Home";
 import { useEffect } from "react";
 import { useSetRecoilState } from "recoil";
 import { loginState } from "./store/loginState";
-import { getValidateToken } from "./apis/auth";
+import { getCurrentUser } from "./apis/auth";
 import { Post } from "./components/pages/Post";
 import { Photo } from "./components/pages/Photo";
 import { ShowTweet } from "./components/pages/ShowTweet";
 import { Profile } from "./components/pages/Profile";
 import { EditProfile } from "./components/pages/EditProfile";
+import { currentUserState } from "./store/currentUser";
 
 function App() {
   const location = useLocation();
@@ -21,13 +22,16 @@ function App() {
 
   const setLogin = useSetRecoilState(loginState);
 
+  const setCurrentUser = useSetRecoilState(currentUserState);
+
   const backgroundLocation =
     location.state && location.state.backgroundLocation;
 
   const handleRequireLogin = async () => {
-    const res = await getValidateToken();
+    const res = await getCurrentUser();
     if (res.status) {
       setLogin(true);
+      setCurrentUser(res.currentUser);
       navigate(location);
     } else {
       navigate("/");
