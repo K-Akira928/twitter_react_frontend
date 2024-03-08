@@ -12,9 +12,13 @@ import { IoPersonOutline } from "react-icons/io5";
 import { CgMoreO } from "react-icons/cg";
 import { RiQuillPenLine } from "react-icons/ri";
 import { Link, useLocation } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import { currentUserState } from "../../store/currentUser";
+import { IoIosMore } from "react-icons/io";
 
 export const SideNav = () => {
   const location = useLocation();
+  const currentUser = useRecoilValue(currentUserState);
   return (
     <>
       <div
@@ -157,10 +161,12 @@ export const SideNav = () => {
           xl:justify-start
         `}
         >
-          <TextWithIcon
-            icon={<IoPersonOutline className="size-7" />}
-            text="プロフィール"
-          />
+          <Link to={`/${currentUser.name}`}>
+            <TextWithIcon
+              icon={<IoPersonOutline className="size-7" />}
+              text="プロフィール"
+            />
+          </Link>
         </div>
         <div
           className={`
@@ -226,15 +232,41 @@ export const SideNav = () => {
           <div
             className={`
             w-full h-full
-            flex justify-center items-center
+            cursor-pointer
+            flex justify-around items-center
             hover:bg-gray-800 hover:bg-opacity-70 hover:rounded-full
             xl:px-3
           `}
           >
-            <div className="xl:mr-3">icon</div>
-            <div className="hidden xl:block">
-              <div>name</div>
-              <div>id</div>
+            <div className="xl:mr-3 w-3/12">
+              <div className="size-[40px]">
+                {currentUser.icon ? (
+                  <img
+                    className="object-cover rounded-full"
+                    src={currentUser.icon}
+                    alt="currentUserIcon"
+                  />
+                ) : (
+                  <img
+                    className="object-cover rounded-full"
+                    src="https://placehold.jp/400x400.png"
+                    alt="currentUserDefaultIcon"
+                  />
+                )}
+              </div>
+            </div>
+            <div className=" w-full flex justify-between items-center">
+              <div className="hidden xl:block">
+                <div>
+                  <span className="font-semibold">{currentUser.nickname}</span>
+                </div>
+                <div>
+                  <span className="text-gray-400">@{currentUser.name}</span>
+                </div>
+              </div>
+              <div>
+                <IoIosMore size={20} />
+              </div>
             </div>
           </div>
         </div>
