@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Link,
   useLocation,
@@ -18,6 +18,7 @@ import { fetchingActionTypes } from "../../apis/base";
 import { TweetCard } from "../organisms/tweets/card/TweetCard";
 import { CiLocationOn } from "react-icons/ci";
 import { PiLinkSimpleBold } from "react-icons/pi";
+import { deleteTweetsDestroy } from "../../apis/tweets";
 
 export const Profile = () => {
   const initialFetchState = {
@@ -35,6 +36,14 @@ export const Profile = () => {
   const { fetchUserState, fetchUserDispatch, callback } =
     useUsersShow(initialFetchState);
 
+  const [tweets, setTweets] = useState([]);
+
+  const handleTweetDelete = (id) => {
+    deleteTweetsDestroy(id).then((deleteId) => {
+      setTweets([...tweets].filter((tweet) => tweet.id !== Number(deleteId)));
+    });
+  };
+
   useEffect(() => {
     fetchUserDispatch({ type: fetchingActionTypes.FETCHING });
 
@@ -43,6 +52,9 @@ export const Profile = () => {
         type: res.type,
         payload: res,
         callback: {
+          success: () => {
+            setTweets(res.data.tweets);
+          },
           authFiled: callback.authFiled,
         },
       });
@@ -272,14 +284,16 @@ export const Profile = () => {
         </>
       }
       profileTweets={
-        <>
-          {fetchUserState.data?.tweets &&
-            fetchUserState.data?.tweets.map((tweet) => (
-              <div className="border-b border-gray-500 relative" key={tweet.id}>
-                <TweetCard tweet={tweet} type="index" />
-              </div>
-            ))}
-        </>
+        fetchUserState.status === REQUEST_STATE.OK &&
+        tweets.map((tweet) => (
+          <div className="border-b border-gray-500 relative" key={tweet.id}>
+            <TweetCard
+              tweet={tweet}
+              type="index"
+              handleTweetDelete={() => handleTweetDelete(tweet.id)}
+            />
+          </div>
+        ))
       }
       sideContentsHeader={
         <div className="h-full flex justify-center items-center bg-black">

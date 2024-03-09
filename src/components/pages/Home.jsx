@@ -7,9 +7,11 @@ import { TweetCard } from "../organisms/tweets/card/TweetCard";
 import { useTweetsIndex } from "../../hooks/tweets";
 import { REQUEST_STATE } from "../../constants";
 import { fetchingActionTypes } from "../../apis/base";
-import { fetchTweetsIndex } from "../../apis/tweets";
+import { deleteTweetsDestroy, fetchTweetsIndex } from "../../apis/tweets";
 import { Pagination } from "../organisms/Pagination";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import { currentUserState } from "../../store/currentUser";
 
 export const Home = () => {
   const initialFetchState = {
@@ -17,12 +19,16 @@ export const Home = () => {
     data: [],
   };
 
+  const currentUser = useRecoilValue(currentUserState);
+
   const [searchParams] = useSearchParams();
 
   const currentPage = searchParams.get("page") || 0;
 
   const { fetchTweetsState, fetchTweetsDispatch, callback } =
     useTweetsIndex(initialFetchState);
+
+  const [tweets, setTweets] = useState([]);
 
   const handleFetchTweets = async () => {
     await fetchTweetsDispatch({ type: fetchingActionTypes.FETCHING });
@@ -32,9 +38,18 @@ export const Home = () => {
         type: res.type,
         payload: res,
         callback: {
+          success: () => {
+            setTweets(res.data.tweets);
+          },
           authFiled: callback.authFiled,
         },
       });
+    });
+  };
+
+  const handleTweetDelete = (id) => {
+    deleteTweetsDestroy(id).then((deleteId) => {
+      setTweets([...tweets].filter((tweet) => tweet.id !== Number(deleteId)));
     });
   };
 
@@ -85,6 +100,25 @@ export const Home = () => {
           </nav>
         </>
       }
+      tweetFormIcon={
+        <div className="size-[40px] mt-3">
+          <Link to={`/${currentUser.name}`}>
+            {currentUser.icon ? (
+              <img
+                className="object-cover rounded-full"
+                src={currentUser.icon}
+                alt="currentUserIcon"
+              />
+            ) : (
+              <img
+                className="object-cover rounded-full"
+                src="https://placehold.jp/400x400.png"
+                alt="currentUserDefaultIcon"
+              />
+            )}
+          </Link>
+        </div>
+      }
       tweetForm={<TweetForm successAction={handleFetchTweets} />}
       loading={
         <>
@@ -96,14 +130,16 @@ export const Home = () => {
         </>
       }
       bodyContents={
-        <>
-          {fetchTweetsState.data?.tweets &&
-            fetchTweetsState.data?.tweets.map((tweet) => (
-              <div className="border-b border-gray-500 relative" key={tweet.id}>
-                <TweetCard tweet={tweet} type="index" />
-              </div>
-            ))}
-        </>
+        fetchTweetsState.status === REQUEST_STATE.OK &&
+        tweets.map((tweet) => (
+          <div className="border-b border-gray-500 relative" key={tweet.id}>
+            <TweetCard
+              tweet={tweet}
+              type="index"
+              handleTweetDelete={() => handleTweetDelete(tweet.id)}
+            />
+          </div>
+        ))
       }
       pagination={
         <>
