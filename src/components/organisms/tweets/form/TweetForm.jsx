@@ -12,15 +12,21 @@ import { useTweetCreate } from "../../../../hooks/tweets";
 import { REQUEST_STATE } from "../../../../constants";
 import { postingActionTypes } from "../../../../apis/base";
 import { TweetImagePreview } from "./TweetImagePreview";
+import { postCommentCreate } from "../../../../apis/comments";
+import { Link } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import { currentUserState } from "../../../../store/currentUser";
 
 export const TweetForm = (props) => {
-  const { successAction } = props;
+  const { successAction, parentTweetId, type } = props;
 
   const initialPostState = {
     status: REQUEST_STATE.INITIAL,
     data: [],
     errors: [],
   };
+
+  const currentUser = useRecoilValue(currentUserState);
 
   const [imageFilesState, imageFilesDispatch] = useSelectImages([]);
 
@@ -37,6 +43,27 @@ export const TweetForm = (props) => {
       : setTweetContentFlag(true);
     e.target.style.height = "auto";
     e.target.style.height = e.target.scrollHeight + "px";
+  };
+
+  const handleTweetCreate = (formData, e) => {
+    postTweetCreate(formData).then((res) => {
+      imageFilesState.length &&
+        patchImagesUpdate(imageFilesState, res.data.data.tweet);
+
+      parentTweetId && postCommentCreate(parentTweetId, res.data.data.tweet.id);
+
+      postTweetDispatch({
+        type: res.type,
+        payload: res,
+        callback: {
+          success: () => {
+            successAction();
+            setTweetContentFlag(true);
+            callback.success(e);
+          },
+        },
+      });
+    });
   };
 
   const handleInputFileChange = (e) => {
@@ -64,138 +91,165 @@ export const TweetForm = (props) => {
       type: postingActionTypes.POSTING,
     });
 
-    postTweetCreate(formData).then((res) => {
-      imageFilesState.length &&
-        patchImagesUpdate(imageFilesState, res.data.data.tweet);
-      postTweetDispatch({
-        type: res.type,
-        payload: res,
-        callback: {
-          success: () => {
-            successAction();
-            setTweetContentFlag(true);
-            callback.success(e);
-          },
-        },
-      });
-    });
+    handleTweetCreate(formData, e);
 
     imageFilesDispatch({ type: "reset" });
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div className="w-full">
-        <div className="px-2">
-          <textarea
-            className={`
-            h-14
-            pt-4
-            text-xl
-          bg-black
-            resize-none
-            w-full
-            outline-none
-          `}
-            name="content"
-            onChange={handleTextareaChange}
-            type="textarea"
-            placeholder="いまどうしてる？"
-          />
-        </div>
-        {imageFilesState.length ? (
-          <TweetImagePreview
-            imageFiles={imageFilesState}
-            length={imageFilesState.length}
-            handleDelete={handleImagePreviewDelete}
-          />
-        ) : null}
-        {postTweetState.errors?.content && (
-          <small className="text-red-500 px-2">
-            ※ツイート{postTweetState.errors?.content}
-          </small>
-        )}
-        <div className="flex justify-between items-center py-3">
-          <div className="text-orange-500 w-5/12 flex justify-between">
-            <label
-              className={`
-              cursor-pointer
-              size-8
-              flex justify-center items-center
-              hover:bg-orange-700 hover:bg-opacity-20 hover:rounded-full
-              ${imageFilesState.length === 4 && "text-orange-800"}
-            `}
-            >
-              <input
-                className="hidden"
-                name="images"
-                type="file"
-                accept="image/jpeg, image/png"
-                onChange={handleInputFileChange}
-                disabled={imageFilesState.length === 4}
+    <>
+      <div className="w-1/12">
+        <div className="size-[40px] mt-3">
+          <Link to={`/${currentUser.name}`}>
+            {currentUser.icon ? (
+              <img
+                className="object-cover rounded-full"
+                src={currentUser.icon}
+                alt="currentUserIcon"
               />
-              <RiImage2Line size={20} />
-            </label>
-            <button
-              type="button"
-              className={`
-              size-8
-              flex justify-center items-center
-              hover:bg-orange-700 hover:bg-opacity-20 hover:rounded-full
-            `}
-            >
-              <MdOutlineGifBox size={20} />
-            </button>
-            <button
-              type="button"
-              className={`
-              size-8
-              flex justify-center items-center
-              hover:bg-orange-700 hover:bg-opacity-20 hover:rounded-full
-            `}
-            >
-              <LuListOrdered size={20} />
-            </button>
-            <button
-              type="button"
-              className={`
-              size-8
-              flex justify-center items-center
-              hover:bg-orange-700 hover:bg-opacity-20 hover:rounded-full
-            `}
-            >
-              <TbMoodSmile size={20} />
-            </button>
-            <button
-              type="button"
-              className={`
-              size-8
-              flex justify-center items-center
-              hover:bg-orange-700 hover:bg-opacity-20 hover:rounded-full
-            `}
-            >
-              <TbCalendarTime size={20} />
-            </button>
-            <button
-              type="button"
-              className={`
-              size-8
-              flex justify-center items-center
-              hover:bg-orange-700 hover:bg-opacity-20 hover:rounded-full
-            `}
-            >
-              <HiOutlineLocationMarker size={20} />
-            </button>
-          </div>
-          <button
-            className="btn-primary w-3/12 h-9 disabled:bg-opacity-70"
-            type="submit"
-            disabled={tweetContentFlag && imageFilesState.length === 0}
-          >
-            ツイートする
-          </button>
+            ) : (
+              <img
+                className="object-cover rounded-full"
+                src="https://placehold.jp/400x400.png"
+                alt="currentUserDefaultIcon"
+              />
+            )}
+          </Link>
         </div>
       </div>
-    </form>
+      <div className="w-11/12">
+        <form onSubmit={handleSubmit}>
+          <div className="w-full">
+            <div className="px-2">
+              <textarea
+                className={`
+                h-14
+                pt-4
+                text-xl
+              bg-black
+                resize-none
+                w-full
+                outline-none
+              `}
+                name="content"
+                onChange={handleTextareaChange}
+                type="textarea"
+                placeholder={
+                  type === "comment" ? "返信をツイート" : " いまどうしてる？"
+                }
+              />
+            </div>
+            {imageFilesState.length ? (
+              <TweetImagePreview
+                imageFiles={imageFilesState}
+                length={imageFilesState.length}
+                handleDelete={handleImagePreviewDelete}
+              />
+            ) : null}
+            {postTweetState.errors?.content && (
+              <small className="text-red-500 px-2">
+                ※ツイート{postTweetState.errors?.content}
+              </small>
+            )}
+            <div className="flex justify-between items-center py-3">
+              <div className="text-orange-500 w-5/12 flex justify-between">
+                <label
+                  className={`
+                  cursor-pointer
+                  size-8
+                  flex justify-center items-center
+                  hover:bg-orange-700 hover:bg-opacity-20 hover:rounded-full
+                  ${imageFilesState.length === 4 && "text-orange-800"}
+                `}
+                >
+                  <input
+                    className="hidden"
+                    name="images"
+                    type="file"
+                    accept="image/jpeg, image/png"
+                    onChange={handleInputFileChange}
+                    disabled={imageFilesState.length === 4}
+                  />
+                  <RiImage2Line size={20} />
+                </label>
+                <button
+                  type="button"
+                  className={`
+                  size-8
+                  flex justify-center items-center
+                  hover:bg-orange-700 hover:bg-opacity-20 hover:rounded-full
+                `}
+                >
+                  <MdOutlineGifBox size={20} />
+                </button>
+                <button
+                  type="button"
+                  className={`
+                  size-8
+                  flex justify-center items-center
+                  hover:bg-orange-700 hover:bg-opacity-20 hover:rounded-full
+                `}
+                >
+                  <LuListOrdered size={20} />
+                </button>
+                <button
+                  type="button"
+                  className={`
+                  size-8
+                  flex justify-center items-center
+                  hover:bg-orange-700 hover:bg-opacity-20 hover:rounded-full
+                `}
+                >
+                  <TbMoodSmile size={20} />
+                </button>
+                <button
+                  type="button"
+                  className={`
+                  size-8
+                  flex justify-center items-center
+                  hover:bg-orange-700 hover:bg-opacity-20 hover:rounded-full
+                `}
+                >
+                  <TbCalendarTime size={20} />
+                </button>
+                <button
+                  type="button"
+                  className={`
+                  size-8
+                  flex justify-center items-center
+                  hover:bg-orange-700 hover:bg-opacity-20 hover:rounded-full
+                `}
+                >
+                  <HiOutlineLocationMarker size={20} />
+                </button>
+              </div>
+              {type === "comment" ? (
+                <button
+                  className={`
+                  btn-primary
+                  w-2/12 h-9 disabled:bg-opacity-70
+                  `}
+                  type="submit"
+                  disabled={tweetContentFlag && imageFilesState.length === 0}
+                >
+                  返信
+                </button>
+              ) : (
+                <button
+                  className={`
+                  btn-primary
+                  w-3/12 h-9 disabled:bg-opacity-70
+                  `}
+                  type="submit"
+                  disabled={tweetContentFlag && imageFilesState.length === 0}
+                >
+                  ツイートする
+                </button>
+              )}
+            </div>
+          </div>
+        </form>
+      </div>
+    </>
   );
 };

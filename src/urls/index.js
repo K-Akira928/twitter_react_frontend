@@ -4,4 +4,5 @@ export const auth = "auth";
 export const users = "/users";
 export const signIn = "/sign_in";
 export const tweets = "/tweets";
+export const comments = "/comments";
 export const images = "/images";
