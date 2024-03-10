@@ -9,9 +9,7 @@ import { REQUEST_STATE } from "../../constants";
 import { fetchingActionTypes } from "../../apis/base";
 import { deleteTweetsDestroy, fetchTweetsIndex } from "../../apis/tweets";
 import { Pagination } from "../organisms/Pagination";
-import { Link, useSearchParams } from "react-router-dom";
-import { useRecoilValue } from "recoil";
-import { currentUserState } from "../../store/currentUser";
+import { useSearchParams } from "react-router-dom";
 
 export const Home = () => {
   const initialFetchState = {
@@ -19,9 +17,7 @@ export const Home = () => {
     data: [],
   };
 
-  const currentUser = useRecoilValue(currentUserState);
-
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const currentPage = searchParams.get("page") || 0;
 
@@ -59,7 +55,9 @@ export const Home = () => {
       behavior: "smooth",
     });
     handleFetchTweets();
-  }, [searchParams]);
+    searchParams.get("status") === "tweeted" && setSearchParams();
+    setSearchParams({ page: currentPage });
+  }, [currentPage, searchParams.get("status")]);
 
   const sideNavMemo = useMemo(() => <SideNav />, []);
 
@@ -99,25 +97,6 @@ export const Home = () => {
             </span>
           </nav>
         </>
-      }
-      tweetFormIcon={
-        <div className="size-[40px] mt-3">
-          <Link to={`/${currentUser.name}`}>
-            {currentUser.icon ? (
-              <img
-                className="object-cover rounded-full"
-                src={currentUser.icon}
-                alt="currentUserIcon"
-              />
-            ) : (
-              <img
-                className="object-cover rounded-full"
-                src="https://placehold.jp/400x400.png"
-                alt="currentUserDefaultIcon"
-              />
-            )}
-          </Link>
-        </div>
       }
       tweetForm={<TweetForm successAction={handleFetchTweets} />}
       loading={

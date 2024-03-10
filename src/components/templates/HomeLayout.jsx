@@ -4,7 +4,6 @@ export const HomeLayout = (props) => {
   const {
     sideNav,
     header,
-    tweetFormIcon,
     tweetForm,
     loading,
     bodyContents,
@@ -48,10 +47,7 @@ export const HomeLayout = (props) => {
           `}
           >
             <div className="hidden md:block md:px-4 md:py-4 md:border-b md:border-gray-500">
-              <div className="flex">
-                <div className="w-1/12">{tweetFormIcon}</div>
-                <div className="w-11/12">{tweetForm}</div>
-              </div>
+              <div className="flex">{tweetForm}</div>
             </div>
             <div>{loading}</div>
             <div>
