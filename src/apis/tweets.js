@@ -1,4 +1,4 @@
-import { tweets } from "../urls";
+import { comments, tweets } from "../urls";
 import {
   baseAxiosWithAuthHeaders,
   fetchingActionTypes,
@@ -45,6 +45,23 @@ export const fetchTweetsShow = (id) => {
       params: {
         id: id,
       },
+    })
+    .then((res) => ({
+      type: fetchingActionTypes.FETCH_SUCCESS,
+      data: res.data,
+    }))
+    .catch((e) => ({
+      type: e.isLogin
+        ? fetchingActionTypes.FETCH_FAILED
+        : fetchingActionTypes.AUTH_FAILED,
+      errors: e,
+    }));
+};
+
+export const fetchTweetsShowComments = (id) => {
+  return baseAxiosWithAuthHeaders
+    .get(`${tweets}/${id}/${comments}`, {
+      id: id,
     })
     .then((res) => ({
       type: fetchingActionTypes.FETCH_SUCCESS,

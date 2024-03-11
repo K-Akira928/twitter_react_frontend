@@ -1,13 +1,17 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { ShowTweetLayout } from "../templates/ShowTweetLayout";
 import { useNavigate, useParams } from "react-router-dom";
 import { SideNav } from "../organisms/SideNav";
 import { IoIosSearch } from "react-icons/io";
 import { FaArrowLeft } from "react-icons/fa6";
-import { useTweetsShow } from "../../hooks/tweets";
+import { useTweetCommentsIndex, useTweetsShow } from "../../hooks/tweets";
 import { REQUEST_STATE } from "../../constants";
 import { fetchingActionTypes } from "../../apis/base";
-import { deleteTweetsDestroy, fetchTweetsShow } from "../../apis/tweets";
+import {
+  deleteTweetsDestroy,
+  fetchTweetsShow,
+  fetchTweetsShowComments,
+} from "../../apis/tweets";
 import { TweetCard } from "../organisms/tweets/card/TweetCard";
 import { TweetForm } from "../organisms/tweets/form/TweetForm";
 
@@ -24,10 +28,16 @@ export const ShowTweet = () => {
   const { fetchTweetState, fetchTweetDispatch, callback } =
     useTweetsShow(initialFetchState);
 
-  const handleFetchTweet = () => {
-    fetchTweetDispatch({ type: fetchingActionTypes.FETCHING });
+  const {
+    fetchTweetCommentsState,
+    fetchTweetCommentsDispatch,
+    fetchTweetCommentsCallback,
+  } = useTweetCommentsIndex(initialFetchState);
 
-    fetchTweetsShow(id).then((res) => {
+  const [comments, setComments] = useState([]);
+
+  const handleFetchTweet = async () => {
+    await fetchTweetsShow(id).then((res) => {
       fetchTweetDispatch({
         type: res.type,
         payload: res,
@@ -38,20 +48,45 @@ export const ShowTweet = () => {
     });
   };
 
+  const handleFetchComments = async () => {
+    await fetchTweetsShowComments(id).then((res) => {
+      fetchTweetCommentsDispatch({
+        type: res.type,
+        payload: res,
+        callback: {
+          success: () => {
+            setComments(res.data.comments);
+          },
+          authFiled: fetchTweetCommentsCallback.authFiled,
+        },
+      });
+    });
+  };
+
+  useEffect(() => {
+    handleFetchComments();
+  }, []);
+
   useEffect(() => {
     window.scroll({
       top: 0,
     });
-    handleFetchTweet();
-  }, []);
+
+    fetchTweetDispatch({ type: fetchingActionTypes.FETCHING });
+    fetchTweetCommentsDispatch({ type: fetchingActionTypes.FETCHING });
+
+    Promise.all([handleFetchTweet(), handleFetchComments()]);
+  }, [id]);
 
   const handlePrevClick = () => {
     navigate(-1 || "/home");
   };
 
   const handleTweetDelete = (id) => {
-    deleteTweetsDestroy(id).then(() => {
-      navigate(-1);
+    deleteTweetsDestroy(id).then((deleteId) => {
+      setComments(
+        [...comments].filter((comment) => comment.id !== Number(deleteId))
+      );
     });
   };
 
@@ -115,11 +150,26 @@ export const ShowTweet = () => {
       commentForm={
         fetchTweetState.status === REQUEST_STATE.OK && (
           <TweetForm
-            successAction={handleFetchTweet}
+            successAction={handleFetchComments}
             parentTweetId={fetchTweetState.data.tweet.id}
             type="comment"
           />
         )
+      }
+      comments={
+        fetchTweetCommentsState.status === REQUEST_STATE.OK &&
+        comments.map((commentTweet) => (
+          <div
+            className="border-b border-gray-500 relative"
+            key={commentTweet.id}
+          >
+            <TweetCard
+              tweet={commentTweet}
+              type="index"
+              handleTweetDelete={() => handleTweetDelete(commentTweet.id)}
+            />
+          </div>
+        ))
       }
       sideContentsHeader={
         <div className="h-full flex justify-center items-center bg-black">

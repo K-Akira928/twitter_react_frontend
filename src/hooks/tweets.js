@@ -50,3 +50,18 @@ export const useTweetsShow = (initialState) => {
     },
   };
 };
+
+export const useTweetCommentsIndex = (initialState) => {
+  const [fetchState, dispatch] = useReducer(fetchReducer, initialState);
+
+  const failedCall = useAuthFailedCall();
+
+  return {
+    fetchTweetCommentsState: fetchState,
+    fetchTweetCommentsDispatch: dispatch,
+    fetchTweetCommentsCallback: {
+      success: null,
+      authFiled: failedCall,
+    },
+  };
+};
