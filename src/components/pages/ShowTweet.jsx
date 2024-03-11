@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { ShowTweetLayout } from "../templates/ShowTweetLayout";
 import { useNavigate, useParams } from "react-router-dom";
 import { SideNav } from "../organisms/SideNav";
@@ -9,6 +9,7 @@ import { REQUEST_STATE } from "../../constants";
 import { fetchingActionTypes } from "../../apis/base";
 import { deleteTweetsDestroy, fetchTweetsShow } from "../../apis/tweets";
 import { TweetCard } from "../organisms/tweets/card/TweetCard";
+import { TweetForm } from "../organisms/tweets/form/TweetForm";
 
 export const ShowTweet = () => {
   const initialFetchState = {
@@ -23,10 +24,7 @@ export const ShowTweet = () => {
   const { fetchTweetState, fetchTweetDispatch, callback } =
     useTweetsShow(initialFetchState);
 
-  useEffect(() => {
-    window.scroll({
-      top: 0,
-    });
+  const handleFetchTweet = () => {
     fetchTweetDispatch({ type: fetchingActionTypes.FETCHING });
 
     fetchTweetsShow(id).then((res) => {
@@ -38,10 +36,17 @@ export const ShowTweet = () => {
         },
       });
     });
+  };
+
+  useEffect(() => {
+    window.scroll({
+      top: 0,
+    });
+    handleFetchTweet();
   }, []);
 
   const handlePrevClick = () => {
-    navigate(-1);
+    navigate(-1 || "/home");
   };
 
   const handleTweetDelete = (id) => {
@@ -82,15 +87,38 @@ export const ShowTweet = () => {
       }
       bodyContents={
         fetchTweetState.status === REQUEST_STATE.OK && (
-          <div className="h-screen">
-            <TweetCard
-              tweet={fetchTweetState.data.tweet}
-              type="show"
-              handleTweetDelete={() =>
-                handleTweetDelete(fetchTweetState.data.tweet.id)
-              }
-            />
-          </div>
+          <>
+            <div className="h-full">
+              <TweetCard
+                tweet={fetchTweetState.data.tweet}
+                type="show"
+                handleTweetDelete={() =>
+                  handleTweetDelete(fetchTweetState.data.tweet.id)
+                }
+              />
+            </div>
+            <div className="px-4 pt-3 flex">
+              <div className="w-1/12"></div>
+              <div className="w-full pl-3">
+                <span className="text-gray-400">
+                  返信先:
+                  <span className="ml-1 text-orange-500">
+                    @{fetchTweetState.data.tweet.user.name}
+                  </span>
+                  <span className="text-gray-400">さん</span>
+                </span>
+              </div>
+            </div>
+          </>
+        )
+      }
+      commentForm={
+        fetchTweetState.status === REQUEST_STATE.OK && (
+          <TweetForm
+            successAction={handleFetchTweet}
+            parentTweetId={fetchTweetState.data.tweet.id}
+            type="comment"
+          />
         )
       }
       sideContentsHeader={

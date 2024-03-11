@@ -15,7 +15,7 @@ import { MdOutlineBlock } from "react-icons/md";
 import { ImEmbed2 } from "react-icons/im";
 import { RiFlag2Line } from "react-icons/ri";
 import { TweetImages } from "./TweetImages";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { FaTrashCan } from "react-icons/fa6";
 import { useRecoilValue } from "recoil";
 import { currentUserState } from "../../../../store/currentUser";
@@ -26,6 +26,8 @@ export const TweetCard = (props) => {
   const currentUser = useRecoilValue(currentUserState);
 
   const [menuOepn, setMenuOpen] = useState(false);
+
+  const location = useLocation();
 
   const handleTweetMenuOpen = () => {
     setMenuOpen(true);
@@ -231,7 +233,11 @@ export const TweetCard = (props) => {
                     rounded-full
                     transition
                     hover:bg-sky-500 hover:bg-opacity-20 hover:text-sky-500`}
-                    to="/"
+                    to="/post"
+                    state={{
+                      backgroundLocation: location,
+                      parentTweet: tweet,
+                    }}
                   >
                     <BiMessageRounded className="w-[20px] h-[20px]" />
                   </Link>
@@ -336,7 +342,11 @@ export const TweetCard = (props) => {
                 rounded-full
                 transition
                 hover:bg-sky-500 hover:bg-opacity-20 hover:text-sky-500`}
-                to="/"
+                to="/post"
+                state={{
+                  backgroundLocation: location,
+                  parentTweet: tweet,
+                }}
               >
                 <BiMessageRounded className="w-[20px] h-[20px]" />
               </Link>
