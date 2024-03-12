@@ -31,7 +31,8 @@ export const Profile = () => {
   const location = useLocation();
 
   const [searchParams] = useSearchParams();
-  const isTab = searchParams.get("tab") || "tweets";
+
+  const [tab, setTab] = useState(searchParams.get("tab") || "tweets");
 
   const { fetchUserState, fetchUserDispatch, callback } =
     useUsersShow(initialFetchState);
@@ -47,7 +48,7 @@ export const Profile = () => {
   useEffect(() => {
     fetchUserDispatch({ type: fetchingActionTypes.FETCHING });
 
-    fetchUsersShow(name).then((res) => {
+    fetchUsersShow(name, tab).then((res) => {
       fetchUserDispatch({
         type: res.type,
         payload: res,
@@ -59,7 +60,11 @@ export const Profile = () => {
         },
       });
     });
-  }, [location]);
+  }, [location, tab]);
+
+  const handleTabChange = (tabName) => {
+    setTab(tabName);
+  };
 
   return (
     <ProfileLayout
@@ -238,10 +243,11 @@ export const Profile = () => {
                     flex justify-center items-center
                     hover:bg-white hover:bg-opacity-5 hover:cursor-pointer transition
                   `}
+                  onClick={() => handleTabChange("tweets")}
                 >
                   <span
                     className={`${
-                      isTab === "tweets" &&
+                      tab === "tweets" &&
                       `before:bg-orange-500
                         before:h-1 before:w-1/2
                         before:absolute before:rounded-full
@@ -254,11 +260,23 @@ export const Profile = () => {
                 <div
                   className={`
                   w-1/4 h-full
+                  relative
                   flex justify-center items-center
                   hover:bg-white hover:bg-opacity-5 hover:cursor-pointer transition
                 `}
+                  onClick={() => handleTabChange("comments")}
                 >
-                  <span>返信</span>
+                  <span
+                    className={`${
+                      tab === "comments" &&
+                      `before:bg-orange-500
+                        before:h-1 before:w-1/2
+                        before:absolute before:rounded-full
+                        before:left-1/4 before:bottom-0`
+                    }`}
+                  >
+                    返信
+                  </span>
                 </div>
                 <div
                   className={`
