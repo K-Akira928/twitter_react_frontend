@@ -18,7 +18,8 @@ import { fetchingActionTypes } from "../../apis/base";
 import { TweetCard } from "../organisms/tweets/card/TweetCard";
 import { CiLocationOn } from "react-icons/ci";
 import { PiLinkSimpleBold } from "react-icons/pi";
-import { deleteTweetsDestroy } from "../../apis/tweets";
+import { deleteTweetsDestroy, retweetTweetsToggle } from "../../apis/tweets";
+import { useTweetAction } from "../../hooks/tweets";
 
 export const Profile = () => {
   const initialFetchState = {
@@ -37,11 +38,25 @@ export const Profile = () => {
   const { fetchUserState, fetchUserDispatch, callback } =
     useUsersShow(initialFetchState);
 
-  const [tweets, setTweets] = useState([]);
+  const [tweets, tweetsDispatch] = useTweetAction();
 
   const handleTweetDelete = (id) => {
     deleteTweetsDestroy(id).then((deleteId) => {
-      setTweets([...tweets].filter((tweet) => tweet.id !== Number(deleteId)));
+      tweetsDispatch({
+        type: "delete",
+        id: deleteId,
+      });
+    });
+  };
+
+  const handleTweetRetweet = (tweet) => {
+    retweetTweetsToggle(tweet.id).then((res) => {
+      tweetsDispatch({
+        type: "toggleRetweet",
+        id: res.id,
+        status: res.status,
+        count: tweet.action.retweet.count,
+      });
     });
   };
 
@@ -54,7 +69,7 @@ export const Profile = () => {
         payload: res,
         callback: {
           success: () => {
-            setTweets(res.data.tweets);
+            tweetsDispatch({ type: "set", data: res.data.tweets });
           },
           authFiled: callback.authFiled,
         },
@@ -309,6 +324,7 @@ export const Profile = () => {
               tweet={tweet}
               type="index"
               handleTweetDelete={() => handleTweetDelete(tweet.id)}
+              handleTweetRetweet={() => handleTweetRetweet(tweet)}
             />
           </div>
         ))

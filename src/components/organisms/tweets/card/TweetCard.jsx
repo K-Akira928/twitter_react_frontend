@@ -21,7 +21,7 @@ import { useRecoilValue } from "recoil";
 import { currentUserState } from "../../../../store/currentUser";
 
 export const TweetCard = (props) => {
-  const { tweet, type, handleTweetDelete } = props;
+  const { tweet, type, handleTweetDelete, handleTweetRetweet } = props;
 
   const currentUser = useRecoilValue(currentUserState);
 
@@ -249,17 +249,22 @@ export const TweetCard = (props) => {
                   >
                     <BiMessageRounded className="w-[20px] h-[20px]" />
                   </Link>
-                  <Link
+                  <button
                     className={`
+                    ${tweet.action.retweet.retweeted && "text-green-500"}
                     size-9
                     flex justify-center items-center
                     rounded-full
                     transition
                     hover:bg-green-500 hover:bg-opacity-20 hover:text-green-500`}
                     to="/"
+                    onClick={handleTweetRetweet}
                   >
                     <FaRetweet className="w-[20px] h-[20px]" />
-                  </Link>
+                    {tweet.action.retweet.count > 0 && (
+                      <span className="ml-1">{tweet.action.retweet.count}</span>
+                    )}
+                  </button>
                   <Link
                     className={`
                     size-9
@@ -365,17 +370,22 @@ export const TweetCard = (props) => {
               >
                 <BiMessageRounded className="w-[20px] h-[20px]" />
               </Link>
-              <Link
+              <button
                 className={`
+                ${tweet.action.retweet.retweeted && "text-green-500"}
                 size-9
                 flex justify-center items-center
                 rounded-full
                 transition
                 hover:bg-green-500 hover:bg-opacity-20 hover:text-green-500`}
                 to="/"
+                onClick={handleTweetRetweet}
               >
                 <FaRetweet className="w-[20px] h-[20px]" />
-              </Link>
+                {tweet.action.retweet.count > 0 && (
+                  <span className="ml-1">{tweet.action.retweet.count}</span>
+                )}
+              </button>
               <Link
                 className={`
                 size-9
