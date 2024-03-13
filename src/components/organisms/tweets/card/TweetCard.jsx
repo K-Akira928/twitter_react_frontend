@@ -214,6 +214,14 @@ export const TweetCard = (props) => {
           {type === "index" && (
             <>
               <span className="px-2 break-words whitespace-pre-wrap">
+                {tweet.parent && (
+                  <div>
+                    <span className="text-gray-400 mr-1">返信先:</span>
+                    <span className="text-orange-500">
+                      @{tweet.parent.user.name}
+                    </span>
+                  </div>
+                )}
                 {tweet.content}
                 {tweet.images.length ? (
                   <div className="pt-4">
@@ -308,6 +316,13 @@ export const TweetCard = (props) => {
       {type === "show" && (
         <>
           <div className="px-4 text-xl">
+            {tweet.parent && (
+              <div>
+                <span className="text-orange-500">
+                  @{tweet.parent.user.name}
+                </span>
+              </div>
+            )}
             <span>{tweet.content}</span>
             {tweet.images.length ? (
               <div className="pt-4">

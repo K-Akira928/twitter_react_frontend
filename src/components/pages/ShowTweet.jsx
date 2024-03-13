@@ -123,6 +123,17 @@ export const ShowTweet = () => {
       bodyContents={
         fetchTweetState.status === REQUEST_STATE.OK && (
           <>
+            {fetchTweetState.data.tweet.parent && (
+              <div className="relative">
+                <TweetCard
+                  tweet={fetchTweetState.data.tweet.parent}
+                  type="index"
+                  handleTweetDelete={() =>
+                    handleTweetDelete(fetchTweetState.data.tweet.parent.id)
+                  }
+                />
+              </div>
+            )}
             <div className="h-full">
               <TweetCard
                 tweet={fetchTweetState.data.tweet}
