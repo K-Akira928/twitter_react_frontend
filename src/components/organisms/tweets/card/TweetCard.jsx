@@ -3,6 +3,7 @@ import { IoIosMore } from "react-icons/io";
 import { BiMessageRounded } from "react-icons/bi";
 import { FaRetweet } from "react-icons/fa";
 import { MdFavoriteBorder } from "react-icons/md";
+import { MdFavorite } from "react-icons/md";
 import { LuBookmark } from "react-icons/lu";
 import { BiBarChart } from "react-icons/bi";
 import { MdOutlineFileUpload } from "react-icons/md";
@@ -21,7 +22,13 @@ import { useRecoilValue } from "recoil";
 import { currentUserState } from "../../../../store/currentUser";
 
 export const TweetCard = (props) => {
-  const { tweet, type, handleTweetDelete, handleTweetRetweet } = props;
+  const {
+    tweet,
+    type,
+    handleTweetDelete,
+    handleTweetRetweet,
+    handleTweetFavorite,
+  } = props;
 
   const currentUser = useRecoilValue(currentUserState);
 
@@ -265,17 +272,27 @@ export const TweetCard = (props) => {
                       <span className="ml-1">{tweet.action.retweet.count}</span>
                     )}
                   </button>
-                  <Link
+                  <button
                     className={`
+                    ${tweet.action.favorite.favorited && "text-pink-500"}
                     size-9
                     flex justify-center items-center
                     rounded-full
                     transition
                     hover:bg-pink-500 hover:bg-opacity-20 hover:text-pink-500`}
-                    to="/"
+                    onClick={handleTweetFavorite}
                   >
-                    <MdFavoriteBorder className="w-[20px] h-[20px]" />
-                  </Link>
+                    {tweet.action.favorite.favorited ? (
+                      <MdFavorite className="w-[20px] h-[20px]" />
+                    ) : (
+                      <MdFavoriteBorder className="w-[20px] h-[20px]" />
+                    )}
+                    {tweet.action.favorite.count > 0 && (
+                      <span className="ml-1">
+                        {tweet.action.favorite.count}
+                      </span>
+                    )}
+                  </button>
                   <Link
                     className={`
                     size-9
@@ -386,17 +403,25 @@ export const TweetCard = (props) => {
                   <span className="ml-1">{tweet.action.retweet.count}</span>
                 )}
               </button>
-              <Link
+              <button
                 className={`
-                size-9
-                flex justify-center items-center
-                rounded-full
-                transition
-                hover:bg-pink-500 hover:bg-opacity-20 hover:text-pink-500`}
-                to="/"
+                    ${tweet.action.favorite.favorited && "text-pink-500"}
+                    size-9
+                    flex justify-center items-center
+                    rounded-full
+                    transition
+                    hover:bg-pink-500 hover:bg-opacity-20 hover:text-pink-500`}
+                onClick={handleTweetFavorite}
               >
-                <MdFavoriteBorder className="w-[20px] h-[20px]" />
-              </Link>
+                {tweet.action.favorite.favorited ? (
+                  <MdFavorite className="w-[20px] h-[20px]" />
+                ) : (
+                  <MdFavoriteBorder className="w-[20px] h-[20px]" />
+                )}
+                {tweet.action.favorite.count > 0 && (
+                  <span className="ml-1">{tweet.action.favorite.count}</span>
+                )}
+              </button>
               <Link
                 className={`
                 size-9
