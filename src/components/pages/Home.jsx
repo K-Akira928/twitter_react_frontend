@@ -1,13 +1,17 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo } from "react";
 import { HomeLayout } from "../templates/HomeLayout";
 import { SideNav } from "../organisms/SideNav";
 import { IoIosSearch } from "react-icons/io";
 import { TweetForm } from "../organisms/tweets/form/TweetForm";
 import { TweetCard } from "../organisms/tweets/card/TweetCard";
-import { useTweetsIndex } from "../../hooks/tweets";
+import { useTweetAction, useTweetsIndex } from "../../hooks/tweets";
 import { REQUEST_STATE } from "../../constants";
 import { fetchingActionTypes } from "../../apis/base";
-import { deleteTweetsDestroy, fetchTweetsIndex } from "../../apis/tweets";
+import {
+  deleteTweetsDestroy,
+  fetchTweetsIndex,
+  retweetTweetsToggle,
+} from "../../apis/tweets";
 import { Pagination } from "../organisms/Pagination";
 import { useSearchParams } from "react-router-dom";
 
@@ -24,7 +28,7 @@ export const Home = () => {
   const { fetchTweetsState, fetchTweetsDispatch, callback } =
     useTweetsIndex(initialFetchState);
 
-  const [tweets, setTweets] = useState([]);
+  const [tweets, tweetsDispatch] = useTweetAction();
 
   const handleFetchTweets = async () => {
     await fetchTweetsDispatch({ type: fetchingActionTypes.FETCHING });
@@ -35,7 +39,7 @@ export const Home = () => {
         payload: res,
         callback: {
           success: () => {
-            setTweets(res.data.tweets);
+            tweetsDispatch({ type: "set", data: res.data.tweets });
           },
           authFiled: callback.authFiled,
         },
@@ -45,7 +49,21 @@ export const Home = () => {
 
   const handleTweetDelete = (id) => {
     deleteTweetsDestroy(id).then((deleteId) => {
-      setTweets([...tweets].filter((tweet) => tweet.id !== Number(deleteId)));
+      tweetsDispatch({
+        type: "delete",
+        id: deleteId,
+      });
+    });
+  };
+
+  const handleTweetRetweet = (tweet) => {
+    retweetTweetsToggle(tweet.id).then((res) => {
+      tweetsDispatch({
+        type: "toggleRetweet",
+        id: res.id,
+        status: res.status,
+        count: tweet.action.retweet.count,
+      });
     });
   };
 
@@ -116,6 +134,7 @@ export const Home = () => {
               tweet={tweet}
               type="index"
               handleTweetDelete={() => handleTweetDelete(tweet.id)}
+              handleTweetRetweet={() => handleTweetRetweet(tweet)}
             />
           </div>
         ))

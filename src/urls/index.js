@@ -6,3 +6,4 @@ export const signIn = "/sign_in";
 export const tweets = "/tweets";
 export const comments = "/comments";
 export const images = "/images";
+export const retweets = "/retweets";
