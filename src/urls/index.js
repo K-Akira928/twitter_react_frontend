@@ -7,3 +7,4 @@ export const tweets = "/tweets";
 export const comments = "/comments";
 export const images = "/images";
 export const retweets = "/retweets";
+export const favorites = "/favorites";

@@ -88,6 +88,20 @@ export const useTweetAction = () => {
         newState.splice(targetIndex, 1, target);
         return newState;
       }
+
+      case "toggleFavorite": {
+        const newState = [...state];
+        const target = newState.find((tweet) => tweet.id === action.id);
+        const targetIndex = state.findIndex((tweet) => tweet === target);
+
+        target.action.favorite.favorited =
+          action.status === "created" ? true : false;
+        target.action.favorite.count =
+          action.status === "created" ? action.count++ : action.count--;
+
+        newState.splice(targetIndex, 1, target);
+        return newState;
+      }
       default:
         throw new Error();
     }

@@ -1,4 +1,4 @@
-import { comments, retweets, tweets } from "../urls";
+import { comments, favorites, retweets, tweets } from "../urls";
 import {
   baseAxiosWithAuthHeaders,
   fetchingActionTypes,
@@ -84,6 +84,14 @@ export const deleteTweetsDestroy = (id) => {
 export const retweetTweetsToggle = (id) => {
   return baseAxiosWithAuthHeaders
     .post(`${tweets}/${id}${retweets}`)
+    .then((res) => {
+      return res.data;
+    });
+};
+
+export const favoriteTweetsToggle = (id) => {
+  return baseAxiosWithAuthHeaders
+    .post(`${tweets}/${id}${favorites}`)
     .then((res) => {
       return res.data;
     });
