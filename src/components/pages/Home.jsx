@@ -9,6 +9,7 @@ import { REQUEST_STATE } from "../../constants";
 import { fetchingActionTypes } from "../../apis/base";
 import {
   deleteTweetsDestroy,
+  favoriteTweetsToggle,
   fetchTweetsIndex,
   retweetTweetsToggle,
 } from "../../apis/tweets";
@@ -29,6 +30,8 @@ export const Home = () => {
     useTweetsIndex(initialFetchState);
 
   const [tweets, tweetsDispatch] = useTweetAction();
+
+  console.log(tweets);
 
   const handleFetchTweets = async () => {
     await fetchTweetsDispatch({ type: fetchingActionTypes.FETCHING });
@@ -63,6 +66,17 @@ export const Home = () => {
         id: res.id,
         status: res.status,
         count: tweet.action.retweet.count,
+      });
+    });
+  };
+
+  const handleTweetFavorite = (tweet) => {
+    favoriteTweetsToggle(tweet.id).then((res) => {
+      tweetsDispatch({
+        type: "toggleFavorite",
+        id: res.id,
+        status: res.status,
+        count: tweet.action.favorite.count,
       });
     });
   };
@@ -135,6 +149,7 @@ export const Home = () => {
               type="index"
               handleTweetDelete={() => handleTweetDelete(tweet.id)}
               handleTweetRetweet={() => handleTweetRetweet(tweet)}
+              handleTweetFavorite={() => handleTweetFavorite(tweet)}
             />
           </div>
         ))

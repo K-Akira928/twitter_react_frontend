@@ -13,6 +13,7 @@ import { REQUEST_STATE } from "../../constants";
 import { fetchingActionTypes } from "../../apis/base";
 import {
   deleteTweetsDestroy,
+  favoriteTweetsToggle,
   fetchTweetsShow,
   fetchTweetsShowComments,
   retweetTweetsToggle,
@@ -146,6 +147,31 @@ export const ShowTweet = () => {
     });
   };
 
+  const handleTweetFavorite = (tweet, type) => {
+    favoriteTweetsToggle(tweet.id).then((res) => {
+      type === "comments"
+        ? commentsDispatch({
+            type: "toggleFavorite",
+            id: res.id,
+            status: res.status,
+            count: tweet.action.favorite.count,
+          })
+        : type === "tweet"
+        ? tweetDispatch({
+            type: "toggleFavorite",
+            id: res.id,
+            status: res.status,
+            count: tweet.action.favorite.count,
+          })
+        : parentDispatch({
+            type: "toggleFavorite",
+            id: res.id,
+            status: res.status,
+            count: tweet.action.favorite.count,
+          });
+    });
+  };
+
   return (
     <ShowTweetLayout
       sideNav={<SideNav />}
@@ -191,6 +217,9 @@ export const ShowTweet = () => {
                   handleTweetRetweet={() => {
                     handleTweetRetweet(parent[0]);
                   }}
+                  handleTweetFavorite={() => {
+                    handleTweetFavorite(parent[0]);
+                  }}
                 />
               </div>
             )}
@@ -204,6 +233,9 @@ export const ShowTweet = () => {
                 }}
                 handleTweetRetweet={() => {
                   handleTweetRetweet(tweet[0], "tweet");
+                }}
+                handleTweetFavorite={() => {
+                  handleTweetFavorite(tweet[0], "tweet");
                 }}
               />
             </div>
@@ -246,6 +278,9 @@ export const ShowTweet = () => {
               }
               handleTweetRetweet={() =>
                 handleTweetRetweet(commentTweet, "comments")
+              }
+              handleTweetFavorite={() =>
+                handleTweetFavorite(commentTweet, "comments")
               }
             />
           </div>
