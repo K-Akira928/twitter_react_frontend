@@ -1,4 +1,4 @@
-import { users } from "../urls";
+import { follow, users } from "../urls";
 import {
   baseAxios,
   baseAxiosWithAuthHeaders,
@@ -68,4 +68,12 @@ export const patchUsersUpdate = (name, formData) => {
       type: patchActionTypes.PATCH_FAILED,
       errors: e.response.data.errors,
     }));
+};
+
+export const postFollowsCreate = (name) => {
+  return baseAxiosWithAuthHeaders
+    .post(`${users}/${name}${follow}`)
+    .catch((e) => {
+      return Promise.reject(e);
+    });
 };
