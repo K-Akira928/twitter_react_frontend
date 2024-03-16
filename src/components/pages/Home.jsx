@@ -31,8 +31,6 @@ export const Home = () => {
 
   const [tweets, tweetsDispatch] = useTweetAction();
 
-  console.log(tweets);
-
   const handleFetchTweets = async () => {
     await fetchTweetsDispatch({ type: fetchingActionTypes.FETCHING });
 

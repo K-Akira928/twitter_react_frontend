@@ -101,8 +101,6 @@ export const ShowTweet = () => {
     navigate(-1 || "/home");
   };
 
-  console.log(parent);
-
   const handleTweetDelete = (id, type) => {
     deleteTweetsDestroy(id).then((deleteId) => {
       type === "comments"
