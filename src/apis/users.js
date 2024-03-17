@@ -1,4 +1,4 @@
-import { follow, users } from "../urls";
+import { follow, unfollow, users } from "../urls";
 import {
   baseAxios,
   baseAxiosWithAuthHeaders,
@@ -73,6 +73,14 @@ export const patchUsersUpdate = (name, formData) => {
 export const postFollowsCreate = (name) => {
   return baseAxiosWithAuthHeaders
     .post(`${users}/${name}${follow}`)
+    .catch((e) => {
+      return Promise.reject(e);
+    });
+};
+
+export const deleteUnfollowDestroy = (name) => {
+  return baseAxiosWithAuthHeaders
+    .delete(`${users}/${name}${unfollow}`)
     .catch((e) => {
       return Promise.reject(e);
     });

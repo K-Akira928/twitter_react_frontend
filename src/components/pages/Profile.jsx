@@ -13,7 +13,11 @@ import { LuMail } from "react-icons/lu";
 import { LuBellPlus } from "react-icons/lu";
 import { REQUEST_STATE } from "../../constants";
 import { useUsersShow } from "../../hooks/users";
-import { fetchUsersShow, postFollowsCreate } from "../../apis/users";
+import {
+  deleteUnfollowDestroy,
+  fetchUsersShow,
+  postFollowsCreate,
+} from "../../apis/users";
 import { fetchingActionTypes } from "../../apis/base";
 import { TweetCard } from "../organisms/tweets/card/TweetCard";
 import { CiLocationOn } from "react-icons/ci";
@@ -97,11 +101,17 @@ export const Profile = () => {
 
   const handleFollowToggle = (userName) => {
     showUser.action.follow
-      ? console.log("フォロー解除")
+      ? deleteUnfollowDestroy(userName).then(() => {
+          const newShowUserState = {
+            ...showUser,
+            action: { follow: false },
+          };
+          setShowUser(newShowUserState);
+        })
       : postFollowsCreate(userName).then(() => {
           const newShowUserState = {
             ...showUser,
-            action: { follow: !showUser.action.follow },
+            action: { follow: true },
           };
           setShowUser(newShowUserState);
         });
@@ -217,19 +227,29 @@ export const Profile = () => {
                     </button>
                     <button
                       className={`
-                      h-[34px] px-4
-                      flex justify-center items-center
+                      ${
+                        showUser.action.follow &&
+                        "hover:border-red-500 hover:text-red-500"
+                      }
+                      relative
+                      h-[34px] w-[124px]
                       border rounded-full mr-3 transition
                       hover:bg-opacity-10 hover:bg-white
                     `}
                       onClick={() => handleFollowToggle(showUser.name)}
                     >
                       {showUser.action.follow ? (
-                        <span>フォロー中</span>
+                        <>
+                          <div className="absolute rounded-full bg-black size-full top-0 left-0 flex justify-center items-center hover:opacity-0 z-10">
+                            <span>フォロー中</span>
+                          </div>
+                          <div className="absolute size-full top-0 left-0 flex justify-center items-center z-0">
+                            <span className="text-red-500">フォロー解除</span>
+                          </div>
+                        </>
                       ) : (
                         <span>フォロー</span>
                       )}
-                      <span>フォロー中</span>
                     </button>
                   </>
                 )}
