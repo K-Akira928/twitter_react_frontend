@@ -215,31 +215,22 @@ export const Profile = () => {
                     >
                       <LuBellPlus />
                     </button>
-                    {showUser.action.follow ? (
-                      <button
-                        className={`
-                        h-[34px] px-4
-                        flex justify-center items-center
-                        border rounded-full mr-3 transition
-                        hover:bg-opacity-10 hover:bg-white
-                      `}
-                        onClick={() => handleFollowToggle(showUser.name)}
-                      >
+                    <button
+                      className={`
+                      h-[34px] px-4
+                      flex justify-center items-center
+                      border rounded-full mr-3 transition
+                      hover:bg-opacity-10 hover:bg-white
+                    `}
+                      onClick={() => handleFollowToggle(showUser.name)}
+                    >
+                      {showUser.action.follow ? (
                         <span>フォロー中</span>
-                      </button>
-                    ) : (
-                      <button
-                        className={`
-                        h-[34px] px-4
-                        flex justify-center items-center
-                        border rounded-full mr-3 transition
-                        hover:bg-opacity-10 hover:bg-white
-                      `}
-                        onClick={() => handleFollowToggle(showUser.name)}
-                      >
+                      ) : (
                         <span>フォロー</span>
-                      </button>
-                    )}
+                      )}
+                      <span>フォロー中</span>
+                    </button>
                   </>
                 )}
               </div>
