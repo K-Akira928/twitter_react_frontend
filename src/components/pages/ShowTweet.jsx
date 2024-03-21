@@ -42,7 +42,6 @@ export const ShowTweet = () => {
 
   const [comments, commentsDispatch] = useTweetAction();
   const [parent, parentDispatch] = useTweetAction();
-  const [tweet, tweetDispatch] = useTweetAction();
 
   const handleFetchTweet = async () => {
     await fetchTweetsShow(id).then((res) => {
@@ -56,7 +55,6 @@ export const ShowTweet = () => {
                 type: "set",
                 data: new Array(res.data.tweet.parent),
               });
-            tweetDispatch({ type: "set", data: new Array(res.data.tweet) });
           },
           authFiled: callback.authFiled,
         },
@@ -101,75 +99,6 @@ export const ShowTweet = () => {
     navigate(-1 || "/home");
   };
 
-  const handleTweetDelete = (id, type) => {
-    deleteTweetsDestroy(id).then((deleteId) => {
-      type === "comments"
-        ? commentsDispatch({
-            type: "delete",
-            id: deleteId,
-          })
-        : type === "tweet"
-        ? tweetDispatch({
-            type: "delete",
-            id: deleteId,
-          })
-        : parentDispatch({
-            type: "delete",
-            id: deleteId,
-          });
-    });
-  };
-
-  const handleTweetRetweet = (tweet, type) => {
-    retweetTweetsToggle(tweet.id).then((res) => {
-      type === "comments"
-        ? commentsDispatch({
-            type: "toggleRetweet",
-            id: res.id,
-            status: res.status,
-            count: tweet.action.retweet.count,
-          })
-        : type === "tweet"
-        ? tweetDispatch({
-            type: "toggleRetweet",
-            id: res.id,
-            status: res.status,
-            count: tweet.action.retweet.count,
-          })
-        : parentDispatch({
-            type: "toggleRetweet",
-            id: res.id,
-            status: res.status,
-            count: tweet.action.retweet.count,
-          });
-    });
-  };
-
-  const handleTweetFavorite = (tweet, type) => {
-    favoriteTweetsToggle(tweet.id).then((res) => {
-      type === "comments"
-        ? commentsDispatch({
-            type: "toggleFavorite",
-            id: res.id,
-            status: res.status,
-            count: tweet.action.favorite.count,
-          })
-        : type === "tweet"
-        ? tweetDispatch({
-            type: "toggleFavorite",
-            id: res.id,
-            status: res.status,
-            count: tweet.action.favorite.count,
-          })
-        : parentDispatch({
-            type: "toggleFavorite",
-            id: res.id,
-            status: res.status,
-            count: tweet.action.favorite.count,
-          });
-    });
-  };
-
   return (
     <ShowTweetLayout
       sideNav={<SideNav />}
@@ -208,34 +137,11 @@ export const ShowTweet = () => {
                 <TweetCard
                   tweet={fetchTweetState.data.tweet.parent}
                   type="index"
-                  handleTweetDelete={() => {
-                    handleTweetDelete(parent[0].id);
-                    navigate("/home");
-                  }}
-                  handleTweetRetweet={() => {
-                    handleTweetRetweet(parent[0]);
-                  }}
-                  handleTweetFavorite={() => {
-                    handleTweetFavorite(parent[0]);
-                  }}
                 />
               </div>
             )}
             <div className="h-full">
-              <TweetCard
-                tweet={fetchTweetState.data.tweet}
-                type="show"
-                handleTweetDelete={() => {
-                  handleTweetDelete(tweet[0].id, "tweet");
-                  navigate("/home");
-                }}
-                handleTweetRetweet={() => {
-                  handleTweetRetweet(tweet[0], "tweet");
-                }}
-                handleTweetFavorite={() => {
-                  handleTweetFavorite(tweet[0], "tweet");
-                }}
-              />
+              <TweetCard tweet={fetchTweetState.data.tweet} type="show" />
             </div>
             <div className="px-4 pt-3 flex">
               <div className="w-1/12"></div>
@@ -268,19 +174,7 @@ export const ShowTweet = () => {
             className="border-b border-gray-500 relative"
             key={commentTweet.id}
           >
-            <TweetCard
-              tweet={commentTweet}
-              type="index"
-              handleTweetDelete={() =>
-                handleTweetDelete(commentTweet.id, "comments")
-              }
-              handleTweetRetweet={() =>
-                handleTweetRetweet(commentTweet, "comments")
-              }
-              handleTweetFavorite={() =>
-                handleTweetFavorite(commentTweet, "comments")
-              }
-            />
+            <TweetCard tweet={commentTweet} type="index" />
           </div>
         ))
       }

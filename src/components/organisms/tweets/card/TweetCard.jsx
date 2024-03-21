@@ -16,25 +16,65 @@ import { MdOutlineBlock } from "react-icons/md";
 import { ImEmbed2 } from "react-icons/im";
 import { RiFlag2Line } from "react-icons/ri";
 import { TweetImages } from "./TweetImages";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaTrashCan } from "react-icons/fa6";
 import { useRecoilValue } from "recoil";
 import { currentUserState } from "../../../../store/currentUser";
+import {
+  deleteTweetsDestroy,
+  favoriteTweetsToggle,
+  retweetTweetsToggle,
+} from "../../../../apis/tweets";
 
 export const TweetCard = (props) => {
-  const {
-    tweet,
-    type,
-    handleTweetDelete,
-    handleTweetRetweet,
-    handleTweetFavorite,
-  } = props;
+  const { tweet, type } = props;
 
   const currentUser = useRecoilValue(currentUserState);
 
   const [menuOepn, setMenuOpen] = useState(false);
 
   const location = useLocation();
+
+  const navigate = useNavigate();
+
+  const [tweetActionStatus, setTweetActionStatus] = useState({
+    retweet: tweet.action.retweet,
+    favorite: tweet.action.favorite,
+  });
+
+  const handleTweetDelete = () => {
+    deleteTweetsDestroy(tweet.id).then(() => {
+      navigate("/home");
+    });
+  };
+
+  const handleTweetRetweet = () => {
+    retweetTweetsToggle(tweet.id).then(() => {
+      setTweetActionStatus({
+        ...tweetActionStatus,
+        retweet: {
+          retweeted: !tweetActionStatus.retweet.retweeted,
+          count: tweetActionStatus.retweet.retweeted
+            ? tweetActionStatus.retweet.count - 1
+            : tweetActionStatus.retweet.count + 1,
+        },
+      });
+    });
+  };
+
+  const handleTweetFavorite = () => {
+    favoriteTweetsToggle(tweet.id).then(() => {
+      setTweetActionStatus({
+        ...tweetActionStatus,
+        favorite: {
+          favorited: !tweetActionStatus.favorite.favorited,
+          count: tweetActionStatus.favorite.favorited
+            ? tweetActionStatus.favorite.count - 1
+            : tweetActionStatus.favorite.count + 1,
+        },
+      });
+    });
+  };
 
   const handleTweetMenuOpen = () => {
     setMenuOpen(true);
@@ -258,7 +298,7 @@ export const TweetCard = (props) => {
                   </Link>
                   <button
                     className={`
-                    ${tweet.action.retweet.retweeted && "text-green-500"}
+                    ${tweetActionStatus.retweet.retweeted && "text-green-500"}
                     size-9
                     flex justify-center items-center
                     rounded-full
@@ -268,13 +308,15 @@ export const TweetCard = (props) => {
                     onClick={handleTweetRetweet}
                   >
                     <FaRetweet className="w-[20px] h-[20px]" />
-                    {tweet.action.retweet.count > 0 && (
-                      <span className="ml-1">{tweet.action.retweet.count}</span>
+                    {tweetActionStatus.retweet.count > 0 && (
+                      <span className="ml-1">
+                        {tweetActionStatus.retweet.count}
+                      </span>
                     )}
                   </button>
                   <button
                     className={`
-                    ${tweet.action.favorite.favorited && "text-pink-500"}
+                    ${tweetActionStatus.favorite.favorited && "text-pink-500"}
                     size-9
                     flex justify-center items-center
                     rounded-full
@@ -282,14 +324,14 @@ export const TweetCard = (props) => {
                     hover:bg-pink-500 hover:bg-opacity-20 hover:text-pink-500`}
                     onClick={handleTweetFavorite}
                   >
-                    {tweet.action.favorite.favorited ? (
+                    {tweetActionStatus.favorite.favorited ? (
                       <MdFavorite className="w-[20px] h-[20px]" />
                     ) : (
                       <MdFavoriteBorder className="w-[20px] h-[20px]" />
                     )}
-                    {tweet.action.favorite.count > 0 && (
+                    {tweetActionStatus.favorite.count > 0 && (
                       <span className="ml-1">
-                        {tweet.action.favorite.count}
+                        {tweetActionStatus.favorite.count}
                       </span>
                     )}
                   </button>
@@ -389,7 +431,7 @@ export const TweetCard = (props) => {
               </Link>
               <button
                 className={`
-                ${tweet.action.retweet.retweeted && "text-green-500"}
+                ${tweetActionStatus.retweet.retweeted && "text-green-500"}
                 size-9
                 flex justify-center items-center
                 rounded-full
@@ -399,13 +441,15 @@ export const TweetCard = (props) => {
                 onClick={handleTweetRetweet}
               >
                 <FaRetweet className="w-[20px] h-[20px]" />
-                {tweet.action.retweet.count > 0 && (
-                  <span className="ml-1">{tweet.action.retweet.count}</span>
+                {tweetActionStatus.retweet.count > 0 && (
+                  <span className="ml-1">
+                    {tweetActionStatus.retweet.count}
+                  </span>
                 )}
               </button>
               <button
                 className={`
-                    ${tweet.action.favorite.favorited && "text-pink-500"}
+                    ${tweetActionStatus.favorite.favorited && "text-pink-500"}
                     size-9
                     flex justify-center items-center
                     rounded-full
@@ -413,13 +457,15 @@ export const TweetCard = (props) => {
                     hover:bg-pink-500 hover:bg-opacity-20 hover:text-pink-500`}
                 onClick={handleTweetFavorite}
               >
-                {tweet.action.favorite.favorited ? (
+                {tweetActionStatus.favorite.favorited ? (
                   <MdFavorite className="w-[20px] h-[20px]" />
                 ) : (
                   <MdFavoriteBorder className="w-[20px] h-[20px]" />
                 )}
-                {tweet.action.favorite.count > 0 && (
-                  <span className="ml-1">{tweet.action.favorite.count}</span>
+                {tweetActionStatus.favorite.count > 0 && (
+                  <span className="ml-1">
+                    {tweetActionStatus.favorite.count}
+                  </span>
                 )}
               </button>
               <Link
