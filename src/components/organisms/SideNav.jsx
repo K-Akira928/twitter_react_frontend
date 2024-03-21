@@ -73,16 +73,17 @@ export const SideNav = () => {
             text="話題を検索"
           />
         </div>
-        <div
+        <Link
           className={`
           w-[50px] h-[50px]
           flex items-center justify-center
           xl:w-[260px] xl:h-[58px]
           xl:justify-start
         `}
+          to={"/notifications"}
         >
           <TextWithIcon icon={<TbBell className="size-7" />} text="通知" />
-        </div>
+        </Link>
         <div
           className={`
           w-[50px] h-[50px]

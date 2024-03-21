@@ -14,6 +14,7 @@ import { ShowTweet } from "./components/pages/ShowTweet";
 import { Profile } from "./components/pages/Profile";
 import { EditProfile } from "./components/pages/EditProfile";
 import { currentUserState } from "./store/currentUser";
+import { Notifications } from "./components/pages/Notifications";
 
 function App() {
   const location = useLocation();
@@ -49,6 +50,7 @@ function App() {
         <Route path="/sign_up" element={<Signup />} />
         <Route path="/sign_in" element={<Signin />} />
         <Route path="/home" element={<Home />} />
+        <Route path="/notifications" element={<Notifications />} />
         <Route path="/tweets/:id" element={<ShowTweet />} />
         <Route path="/:name" element={<Profile />} />
       </Routes>

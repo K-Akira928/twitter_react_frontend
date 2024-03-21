@@ -10,3 +10,4 @@ export const comments = "/comments";
 export const images = "/images";
 export const retweets = "/retweets";
 export const favorites = "/favorites";
+export const notifications = "/notifications";
