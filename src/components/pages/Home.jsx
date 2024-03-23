@@ -7,12 +7,7 @@ import { TweetCard } from "../organisms/tweets/card/TweetCard";
 import { useTweetAction, useTweetsIndex } from "../../hooks/tweets";
 import { REQUEST_STATE } from "../../constants";
 import { fetchingActionTypes } from "../../apis/base";
-import {
-  deleteTweetsDestroy,
-  favoriteTweetsToggle,
-  fetchTweetsIndex,
-  retweetTweetsToggle,
-} from "../../apis/tweets";
+import { deleteTweetsDestroy, fetchTweetsIndex } from "../../apis/tweets";
 import { Pagination } from "../organisms/Pagination";
 import { useSearchParams } from "react-router-dom";
 
@@ -29,8 +24,6 @@ export const Home = () => {
   const { fetchTweetsState, fetchTweetsDispatch, callback } =
     useTweetsIndex(initialFetchState);
 
-  const [tweets, tweetsDispatch] = useTweetAction();
-
   const handleFetchTweets = async () => {
     await fetchTweetsDispatch({ type: fetchingActionTypes.FETCHING });
 
@@ -39,42 +32,8 @@ export const Home = () => {
         type: res.type,
         payload: res,
         callback: {
-          success: () => {
-            tweetsDispatch({ type: "set", data: res.data.tweets });
-          },
           authFiled: callback.authFiled,
         },
-      });
-    });
-  };
-
-  const handleTweetDelete = (id) => {
-    deleteTweetsDestroy(id).then((deleteId) => {
-      tweetsDispatch({
-        type: "delete",
-        id: deleteId,
-      });
-    });
-  };
-
-  const handleTweetRetweet = (tweet) => {
-    retweetTweetsToggle(tweet.id).then((res) => {
-      tweetsDispatch({
-        type: "toggleRetweet",
-        id: res.id,
-        status: res.status,
-        count: tweet.action.retweet.count,
-      });
-    });
-  };
-
-  const handleTweetFavorite = (tweet) => {
-    favoriteTweetsToggle(tweet.id).then((res) => {
-      tweetsDispatch({
-        type: "toggleFavorite",
-        id: res.id,
-        status: res.status,
-        count: tweet.action.favorite.count,
       });
     });
   };
@@ -140,15 +99,9 @@ export const Home = () => {
       }
       bodyContents={
         fetchTweetsState.status === REQUEST_STATE.OK &&
-        tweets.map((tweet) => (
+        fetchTweetsState.data.tweets.map((tweet) => (
           <div className="border-b border-gray-500 relative" key={tweet.id}>
-            <TweetCard
-              tweet={tweet}
-              type="index"
-              handleTweetDelete={() => handleTweetDelete(tweet.id)}
-              handleTweetRetweet={() => handleTweetRetweet(tweet)}
-              handleTweetFavorite={() => handleTweetFavorite(tweet)}
-            />
+            <TweetCard tweet={tweet} type="index" />
           </div>
         ))
       }

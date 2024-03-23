@@ -48,39 +48,6 @@ export const Profile = () => {
 
   const [showUser, setShowUser] = useState({});
 
-  const [tweets, tweetsDispatch] = useTweetAction();
-
-  const handleTweetDelete = (id) => {
-    deleteTweetsDestroy(id).then((deleteId) => {
-      tweetsDispatch({
-        type: "delete",
-        id: deleteId,
-      });
-    });
-  };
-
-  const handleTweetRetweet = (tweet) => {
-    retweetTweetsToggle(tweet.id).then((res) => {
-      tweetsDispatch({
-        type: "toggleRetweet",
-        id: res.id,
-        status: res.status,
-        count: tweet.action.retweet.count,
-      });
-    });
-  };
-
-  const handleTweetFavorite = (tweet) => {
-    favoriteTweetsToggle(tweet.id).then((res) => {
-      tweetsDispatch({
-        type: "toggleFavorite",
-        id: res.id,
-        status: res.status,
-        count: tweet.action.favorite.count,
-      });
-    });
-  };
-
   useEffect(() => {
     fetchUserDispatch({ type: fetchingActionTypes.FETCHING });
 
@@ -91,7 +58,6 @@ export const Profile = () => {
         callback: {
           success: () => {
             setShowUser(res.data.user);
-            tweetsDispatch({ type: "set", data: res.data.tweets });
           },
           authFiled: callback.authFiled,
         },
@@ -362,15 +328,9 @@ export const Profile = () => {
       }
       profileTweets={
         fetchUserState.status === REQUEST_STATE.OK &&
-        tweets.map((tweet) => (
+        fetchUserState.data.tweets.map((tweet) => (
           <div className="border-b border-gray-500 relative" key={tweet.id}>
-            <TweetCard
-              tweet={tweet}
-              type="index"
-              handleTweetDelete={() => handleTweetDelete(tweet.id)}
-              handleTweetRetweet={() => handleTweetRetweet(tweet)}
-              handleTweetFavorite={() => handleTweetFavorite(tweet)}
-            />
+            <TweetCard tweet={tweet} type="index" />
           </div>
         ))
       }
